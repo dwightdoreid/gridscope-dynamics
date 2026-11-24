@@ -1,0 +1,4460 @@
+{
+ "dynawo_version": "1.7.0",
+ "sources": {
+  "PhotovoltaicsWeccCurrentSourceB": {
+   "prefix": "photovoltaics",
+   "params": {
+    "photovoltaics_DDn": {
+     "type": "DOUBLE",
+     "value": "20",
+     "doc": "Down regulation droop (typical: 20..33.3)"
+    },
+    "photovoltaics_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "photovoltaics_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "photovoltaics_DUp": {
+     "type": "DOUBLE",
+     "value": "0.001",
+     "doc": "Up regulation droop (typical: 0)"
+    },
+    "photovoltaics_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.1",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "photovoltaics_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "photovoltaics_DbdPu": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Reactive power (RefFlag = 0) or voltage (RefFlag = 1) deadband in pu (base SNom or UNom) (typical: 0..0.1)"
+    },
+    "photovoltaics_EMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "photovoltaics_EMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "photovoltaics_FDbd1Pu": {
+     "type": "DOUBLE",
+     "value": "0.004",
+     "doc": "Overfrequency deadband for governor response in pu (base omegaNom) (typical: 0.004)"
+    },
+    "photovoltaics_FDbd2Pu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Underfrequency deadband for governor response in pu (base omegaNom)^ (typical: 0.004)"
+    },
+    "photovoltaics_FEMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "photovoltaics_FEMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "photovoltaics_FreqFlag": {
+     "type": "BOOL",
+     "value": "true"
+    },
+    "photovoltaics_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.05",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "photovoltaics_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "photovoltaics_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-2",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "photovoltaics_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "photovoltaics_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-20",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "photovoltaics_Kc": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reactive droop when VCompFlag = 0"
+    },
+    "photovoltaics_Ki": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Volt/VAR regulator integral gain"
+    },
+    "photovoltaics_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "photovoltaics_Kig": {
+     "type": "DOUBLE",
+     "value": "2.36",
+     "doc": "Droop regulator integral gain"
+    },
+    "photovoltaics_Kp": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Volt/VAR regulator proportional gain"
+    },
+    "photovoltaics_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "photovoltaics_Kpg": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Droop regulator proportional gain"
+    },
+    "photovoltaics_Kqi": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "photovoltaics_Kqp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "photovoltaics_Kqv": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "photovoltaics_Kvi": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "photovoltaics_Kvp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "photovoltaics_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "photovoltaics_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "photovoltaics_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Active power upper limit in pu (base SNom) (typical: 1)"
+    },
+    "photovoltaics_PMinPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Active power lower limit in pu (base SNom) (typical: 0)"
+    },
+    "photovoltaics_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "photovoltaics_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "photovoltaics_QFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "photovoltaics_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.4",
+     "doc": "Reactive power upper limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "photovoltaics_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.4",
+     "doc": "Reactive power lower limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "photovoltaics_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "photovoltaics_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "photovoltaics_RefFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Plant level reactive power (0) or voltage control (1)"
+    },
+    "photovoltaics_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "photovoltaics_SNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "photovoltaics_VCompFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Reactive droop (0) or line drop compensation (1) if RefFlag true"
+    },
+    "photovoltaics_VDipPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "photovoltaics_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "photovoltaics_VFrz": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Voltage for freezing Volt/VAR regulator integrator (typical: 0..0.9)"
+    },
+    "photovoltaics_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "photovoltaics_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "photovoltaics_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "photovoltaics_VRef1Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "User-defined reference/bias on the inner-loop voltage control in pu (base UNom) (typical: 0 pu)"
+    },
+    "photovoltaics_VUpPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "photovoltaics_XPu": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "photovoltaics_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "photovoltaics_tFilterPC": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Voltage and reactive power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "photovoltaics_tFt": {
+     "type": "DOUBLE",
+     "value": "1e-5",
+     "doc": "Plant controller Q output lead time constant in s"
+    },
+    "photovoltaics_tFv": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller Q output lag time constant in s (typical: 0.15..5)"
+    },
+    "photovoltaics_tG": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "photovoltaics_tIq": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "photovoltaics_tLag": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller P output lag time constant in s(typical: 0.15..5)"
+    },
+    "photovoltaics_tP": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Filter time constant active power in s (typical: 0.1..0.2)"
+    },
+    "photovoltaics_tPord": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "photovoltaics_tRv": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "photovoltaics_P0Pu": "p_pu",
+    "photovoltaics_Q0Pu": "q_pu",
+    "photovoltaics_U0Pu": "v_pu",
+    "photovoltaics_UPhase0": "angle_pu"
+   },
+   "p_var": "photovoltaics_injector_PInjPu",
+   "q_var": "photovoltaics_injector_QInjPu",
+   "source": "Dynawo example examples/DynaSwing/WECC/PV/WECCPVCurrentSource/WECCPV.par",
+   "missing": [],
+   "kind": "Solar PV",
+   "label": "WECC PV, current source (REPCA + REECB + REGCB)",
+   "category": "WECC",
+   "synchronized": true,
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "PhotovoltaicsWeccVoltageSourceB": {
+   "prefix": "photovoltaics",
+   "params": {
+    "photovoltaics_DDn": {
+     "type": "DOUBLE",
+     "value": "20",
+     "doc": "Down regulation droop (typical: 20..33.3)"
+    },
+    "photovoltaics_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "photovoltaics_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "photovoltaics_DUp": {
+     "type": "DOUBLE",
+     "value": "0.001",
+     "doc": "Up regulation droop (typical: 0)"
+    },
+    "photovoltaics_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.1",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "photovoltaics_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "photovoltaics_DbdPu": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Reactive power (RefFlag = 0) or voltage (RefFlag = 1) deadband in pu (base SNom or UNom) (typical: 0..0.1)"
+    },
+    "photovoltaics_EMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "photovoltaics_EMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "photovoltaics_FDbd1Pu": {
+     "type": "DOUBLE",
+     "value": "0.004",
+     "doc": "Overfrequency deadband for governor response in pu (base omegaNom) (typical: 0.004)"
+    },
+    "photovoltaics_FDbd2Pu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Underfrequency deadband for governor response in pu (base omegaNom)^ (typical: 0.004)"
+    },
+    "photovoltaics_FEMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "photovoltaics_FEMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "photovoltaics_FreqFlag": {
+     "type": "BOOL",
+     "value": "true"
+    },
+    "photovoltaics_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.05",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "photovoltaics_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "photovoltaics_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-2",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "photovoltaics_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "photovoltaics_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-20",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "photovoltaics_Kc": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reactive droop when VCompFlag = 0"
+    },
+    "photovoltaics_Ki": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Volt/VAR regulator integral gain"
+    },
+    "photovoltaics_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "photovoltaics_Kig": {
+     "type": "DOUBLE",
+     "value": "2.36",
+     "doc": "Droop regulator integral gain"
+    },
+    "photovoltaics_Kp": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Volt/VAR regulator proportional gain"
+    },
+    "photovoltaics_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "photovoltaics_Kpg": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Droop regulator proportional gain"
+    },
+    "photovoltaics_Kqi": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "photovoltaics_Kqp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "photovoltaics_Kqv": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "photovoltaics_Kvi": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "photovoltaics_Kvp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "photovoltaics_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "photovoltaics_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "photovoltaics_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Maximum plant level active power command in pu (base SNom)"
+    },
+    "photovoltaics_PMinPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Minimum plant level active power command in pu (base SNom)"
+    },
+    "photovoltaics_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "photovoltaics_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "photovoltaics_QFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "photovoltaics_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.4",
+     "doc": "Maximum plant level reactive power command in pu (base SNom)"
+    },
+    "photovoltaics_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.4",
+     "doc": "Minimum plant level reactive power command in pu (base SNom)"
+    },
+    "photovoltaics_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef)"
+    },
+    "photovoltaics_RSourcePu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Source resistance in pu (base UNom, SNom)"
+    },
+    "photovoltaics_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "photovoltaics_RefFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Plant level reactive power (0) or voltage control (1)"
+    },
+    "photovoltaics_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "photovoltaics_SNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "photovoltaics_VCompFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Reactive droop (0) or line drop compensation (1) if RefFlag true"
+    },
+    "photovoltaics_VDipPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "photovoltaics_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "photovoltaics_VFrz": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Voltage for freezing Volt/VAR regulator integrator (typical: 0..0.9)"
+    },
+    "photovoltaics_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "photovoltaics_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "photovoltaics_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "photovoltaics_VRef1Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "User-defined reference/bias on the inner-loop voltage control in pu (base UNom) (typical: 0 pu)"
+    },
+    "photovoltaics_VUpPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "photovoltaics_XPu": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef)"
+    },
+    "photovoltaics_XSourcePu": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Source reactance in pu (base UNom, SNom)"
+    },
+    "photovoltaics_tE": {
+     "type": "DOUBLE",
+     "value": "0.005"
+    },
+    "photovoltaics_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "photovoltaics_tFilterPC": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Voltage and reactive power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "photovoltaics_tFt": {
+     "type": "DOUBLE",
+     "value": "1e-5",
+     "doc": "Plant controller Q output lead time constant in s"
+    },
+    "photovoltaics_tFv": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller Q output lag time constant in s (typical: 0.15..5)"
+    },
+    "photovoltaics_tG": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "photovoltaics_tIq": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "photovoltaics_tLag": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller P output lag time constant in s(typical: 0.15..5)"
+    },
+    "photovoltaics_tP": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Active power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "photovoltaics_tPord": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "photovoltaics_tRv": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "photovoltaics_P0Pu": "p_pu",
+    "photovoltaics_Q0Pu": "q_pu",
+    "photovoltaics_U0Pu": "v_pu",
+    "photovoltaics_UPhase0": "angle_pu"
+   },
+   "p_var": "photovoltaics_injector_PInjPu",
+   "q_var": "photovoltaics_injector_QInjPu",
+   "source": "Dynawo example examples/DynaSwing/WECC/PV/WECCPVVoltageSource/WECCPVVSource.par",
+   "missing": [],
+   "kind": "Solar PV",
+   "label": "WECC PV, voltage source (REPCA + REECB + REGCB)",
+   "category": "WECC",
+   "synchronized": true,
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: not at equilibrium without a disturbance (dP 3.98 MW, dV 0.0049 pu)",
+    "IEEE 14-Bus: not at equilibrium without a disturbance (dP 4.66 MW, dV 0.0014 pu)"
+   ]
+  },
+  "WTG4AWeccCurrentSource": {
+   "prefix": "WTG4A",
+   "params": {
+    "WTG4A_DDn": {
+     "type": "DOUBLE",
+     "value": "20",
+     "doc": "Down regulation droop (typical: 20..33.3)"
+    },
+    "WTG4A_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "WTG4A_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-2",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "WTG4A_DUp": {
+     "type": "DOUBLE",
+     "value": "0.001",
+     "doc": "Up regulation droop (typical: 0)"
+    },
+    "WTG4A_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.05",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "WTG4A_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "WTG4A_DbdPu": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Reactive power (RefFlag = 0) or voltage (RefFlag = 1) deadband in pu (base SNom or UNom) (typical: 0..0.1)"
+    },
+    "WTG4A_Dshaft": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Damping coefficient in pu (typical: 1.5 pu, base SNom, omegaNom)"
+    },
+    "WTG4A_EMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Maximum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "WTG4A_EMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.5",
+     "doc": "Minimum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "WTG4A_FDbd1Pu": {
+     "type": "DOUBLE",
+     "value": "0.004",
+     "doc": "Overfrequency deadband for governor response in pu (base omegaNom) (typical: 0.004)"
+    },
+    "WTG4A_FDbd2Pu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Underfrequency deadband for governor response in pu (base omegaNom)^ (typical: 0.004)"
+    },
+    "WTG4A_FEMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "WTG4A_FEMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "WTG4A_FreqFlag": {
+     "type": "BOOL",
+     "value": "true"
+    },
+    "WTG4A_Hg": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Generator Inertia in s (typical: 1 s)"
+    },
+    "WTG4A_Ht": {
+     "type": "DOUBLE",
+     "value": "5"
+    },
+    "WTG4A_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.3",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "WTG4A_IqFrzPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Constant reactive current injection value (typical: -0.1 .. 0.1 pu)"
+    },
+    "WTG4A_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "WTG4A_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-1.1",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "WTG4A_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WTG4A_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-20",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "WTG4A_Kc": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reactive droop when VCompFlag = 0"
+    },
+    "WTG4A_Ki": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Volt/VAR regulator integral gain"
+    },
+    "WTG4A_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WTG4A_Kig": {
+     "type": "DOUBLE",
+     "value": "2.36",
+     "doc": "Droop regulator integral gain"
+    },
+    "WTG4A_Kp": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Volt/VAR regulator proportional gain"
+    },
+    "WTG4A_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "WTG4A_Kpg": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Droop regulator proportional gain"
+    },
+    "WTG4A_Kqi": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "WTG4A_Kqp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "WTG4A_Kqv": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "WTG4A_Kshaft": {
+     "type": "DOUBLE",
+     "value": "200",
+     "doc": "Spring constant in pu (typical: 200 pu, base SNom, omegaNom)"
+    },
+    "WTG4A_Kvi": {
+     "type": "DOUBLE",
+     "value": "0.7",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "WTG4A_Kvp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "WTG4A_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "WTG4A_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "WTG4A_PFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Power reference flag: const. Pref (0) or consider generator speed (1)"
+    },
+    "WTG4A_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Maximum plant level active power command in pu (base SNom)"
+    },
+    "WTG4A_PMinPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Minimum plant level active power command in pu (base SNom)"
+    },
+    "WTG4A_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "WTG4A_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "WTG4A_QFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "WTG4A_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.4",
+     "doc": "Maximum plant level reactive power command in pu (base SNom)"
+    },
+    "WTG4A_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.4",
+     "doc": "Minimum plant level reactive power command in pu (base SNom)"
+    },
+    "WTG4A_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WTG4A_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "WTG4A_RefFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Plant level reactive power (0) or voltage control (1)"
+    },
+    "WTG4A_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "WTG4A_SNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "WTG4A_VCompFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Reactive droop (0) or line drop compensation (1) if RefFlag true"
+    },
+    "WTG4A_VDLIp11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4A_VDLIp12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4A_VDLIp21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WTG4A_VDLIp22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4A_VDLIp31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WTG4A_VDLIp32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4A_VDLIp41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WTG4A_VDLIp42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4A_VDLIq11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4A_VDLIq12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4A_VDLIq21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WTG4A_VDLIq22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4A_VDLIq31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WTG4A_VDLIq32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4A_VDLIq41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WTG4A_VDLIq42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4A_VDipPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "WTG4A_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "WTG4A_VFrz": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Voltage for freezing Volt/VAR regulator integrator (typical: 0..0.9)"
+    },
+    "WTG4A_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "WTG4A_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "WTG4A_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "WTG4A_VRef1Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "User-defined reference/bias on the inner-loop voltage control (typical: 0 pu)"
+    },
+    "WTG4A_VUpPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "WTG4A_XPu": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WTG4A_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "WTG4A_tFilterPC": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Voltage and reactive power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "WTG4A_tFt": {
+     "type": "DOUBLE",
+     "value": "1e-5",
+     "doc": "Plant controller Q output lead time constant in s"
+    },
+    "WTG4A_tFv": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller Q output lag time constant in s (typical: 0.15..5)"
+    },
+    "WTG4A_tG": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "WTG4A_tHoldIpMax": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Time delay for which the active current limit (ipMaxPu) is held after voltage dip vDip returns to zero for tHoldIpMax seconds at its value during the voltage dip"
+    },
+    "WTG4A_tHoldIq": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Absolute value of tHoldIq defines seconds to hold current injection after voltage dip ended. tHoldIq > 0 for constant, 0 for no injection after voltage dip, tHoldIq < 0 for voltage-dependent injection (typical: -1 .. 1 s)"
+    },
+    "WTG4A_tIq": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "WTG4A_tLag": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller P output lag time constant in s(typical: 0.15..5)"
+    },
+    "WTG4A_tP": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Active power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "WTG4A_tPord": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "WTG4A_tRv": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "WTG4A_P0Pu": "p_pu",
+    "WTG4A_Q0Pu": "q_pu",
+    "WTG4A_U0Pu": "v_pu",
+    "WTG4A_UPhase0": "angle_pu"
+   },
+   "p_var": "WTG4A_injector_PInjPu",
+   "q_var": "WTG4A_injector_QInjPu",
+   "source": "Dynawo example examples/DynaSwing/WECC/Wind/WECCWTG4ACurrentSource/WECCWTG4A.par",
+   "missing": [],
+   "kind": "Wind (type 4)",
+   "label": "WECC WTG4A (REPCA + REECA + REGCB + WTGTA drive train)",
+   "category": "WECC",
+   "synchronized": true,
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "WTG4BWeccCurrentSource": {
+   "prefix": "WTG4B",
+   "params": {
+    "WTG4B_DDn": {
+     "type": "DOUBLE",
+     "value": "20",
+     "doc": "Down regulation droop (typical: 20..33.3)"
+    },
+    "WTG4B_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "WTG4B_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-2",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "WTG4B_DUp": {
+     "type": "DOUBLE",
+     "value": "0.001",
+     "doc": "Up regulation droop (typical: 0)"
+    },
+    "WTG4B_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.05",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "WTG4B_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "WTG4B_DbdPu": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Reactive power (RefFlag = 0) or voltage (RefFlag = 1) deadband in pu (base SNom or UNom) (typical: 0..0.1)"
+    },
+    "WTG4B_EMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Maximum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "WTG4B_EMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.5",
+     "doc": "Minimum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "WTG4B_FDbd1Pu": {
+     "type": "DOUBLE",
+     "value": "0.004",
+     "doc": "Overfrequency deadband for governor response in pu (base omegaNom) (typical: 0.004)"
+    },
+    "WTG4B_FDbd2Pu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Underfrequency deadband for governor response in pu (base omegaNom)^ (typical: 0.004)"
+    },
+    "WTG4B_FEMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "WTG4B_FEMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "WTG4B_FreqFlag": {
+     "type": "BOOL",
+     "value": "true"
+    },
+    "WTG4B_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.3",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "WTG4B_IqFrzPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Constant reactive current injection value (typical: -0.1 .. 0.1 pu)"
+    },
+    "WTG4B_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "WTG4B_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-1.1",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "WTG4B_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WTG4B_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-20",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "WTG4B_Kc": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reactive droop when VCompFlag = 0"
+    },
+    "WTG4B_Ki": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Volt/VAR regulator integral gain"
+    },
+    "WTG4B_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WTG4B_Kig": {
+     "type": "DOUBLE",
+     "value": "2.36",
+     "doc": "Droop regulator integral gain"
+    },
+    "WTG4B_Kp": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Volt/VAR regulator proportional gain"
+    },
+    "WTG4B_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "WTG4B_Kpg": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Droop regulator proportional gain"
+    },
+    "WTG4B_Kqi": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "WTG4B_Kqp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "WTG4B_Kqv": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "WTG4B_Kvi": {
+     "type": "DOUBLE",
+     "value": "0.7",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "WTG4B_Kvp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "WTG4B_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "WTG4B_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "WTG4B_PFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Power reference flag: const. Pref (0) or consider generator speed (1)"
+    },
+    "WTG4B_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Maximum plant level active power command in pu (base SNom)"
+    },
+    "WTG4B_PMinPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Minimum plant level active power command in pu (base SNom)"
+    },
+    "WTG4B_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "WTG4B_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "WTG4B_QFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "WTG4B_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.4",
+     "doc": "Maximum plant level reactive power command in pu (base SNom)"
+    },
+    "WTG4B_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.4",
+     "doc": "Minimum plant level reactive power command in pu (base SNom)"
+    },
+    "WTG4B_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WTG4B_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "WTG4B_RefFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Plant level reactive power (0) or voltage control (1)"
+    },
+    "WTG4B_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "WTG4B_SNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "WTG4B_VCompFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Reactive droop (0) or line drop compensation (1) if RefFlag true"
+    },
+    "WTG4B_VDLIp11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4B_VDLIp12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4B_VDLIp21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WTG4B_VDLIp22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4B_VDLIp31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WTG4B_VDLIp32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4B_VDLIp41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WTG4B_VDLIp42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4B_VDLIq11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4B_VDLIq12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WTG4B_VDLIq21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WTG4B_VDLIq22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4B_VDLIq31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WTG4B_VDLIq32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4B_VDLIq41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WTG4B_VDLIq42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WTG4B_VDipPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "WTG4B_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "WTG4B_VFrz": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Voltage for freezing Volt/VAR regulator integrator (typical: 0..0.9)"
+    },
+    "WTG4B_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "WTG4B_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "WTG4B_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "WTG4B_VRef1Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "User-defined reference/bias on the inner-loop voltage control (typical: 0 pu)"
+    },
+    "WTG4B_VUpPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "WTG4B_XPu": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WTG4B_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "WTG4B_tFilterPC": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Voltage and reactive power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "WTG4B_tFt": {
+     "type": "DOUBLE",
+     "value": "1e-5",
+     "doc": "Plant controller Q output lead time constant in s"
+    },
+    "WTG4B_tFv": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller Q output lag time constant in s (typical: 0.15..5)"
+    },
+    "WTG4B_tG": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "WTG4B_tHoldIpMax": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Time delay for which the active current limit (ipMaxPu) is held after voltage dip vDip returns to zero for tHoldIpMax seconds at its value during the voltage dip"
+    },
+    "WTG4B_tHoldIq": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Absolute value of tHoldIq defines seconds to hold current injection after voltage dip ended. tHoldIq > 0 for constant, 0 for no injection after voltage dip, tHoldIq < 0 for voltage-dependent injection (typical: -1 .. 1 s)"
+    },
+    "WTG4B_tIq": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "WTG4B_tLag": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller P output lag time constant in s(typical: 0.15..5)"
+    },
+    "WTG4B_tP": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Active power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "WTG4B_tPord": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "WTG4B_tRv": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "WTG4B_P0Pu": "p_pu",
+    "WTG4B_Q0Pu": "q_pu",
+    "WTG4B_U0Pu": "v_pu",
+    "WTG4B_UPhase0": "angle_pu"
+   },
+   "p_var": "WTG4B_injector_PInjPu",
+   "q_var": "WTG4B_injector_QInjPu",
+   "source": "Dynawo example examples/DynaSwing/WECC/Wind/WECCWTG4BCurrentSource/WECCWTG4B.par",
+   "missing": [],
+   "kind": "Wind (type 4)",
+   "label": "WECC WTG4B (REPCA + REECA + REGCB + WTGTB drive train)",
+   "category": "WECC",
+   "synchronized": true,
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "PhotovoltaicsWeccVoltageSourceA": {
+   "prefix": "photovoltaics",
+   "params": {
+    "photovoltaics_DDn": {
+     "type": "DOUBLE",
+     "value": "20",
+     "doc": "Down regulation droop (typical: 20..33.3)"
+    },
+    "photovoltaics_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "photovoltaics_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "photovoltaics_DUp": {
+     "type": "DOUBLE",
+     "value": "0.001",
+     "doc": "Up regulation droop (typical: 0)"
+    },
+    "photovoltaics_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.1",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "photovoltaics_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "photovoltaics_DbdPu": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Reactive power (RefFlag = 0) or voltage (RefFlag = 1) deadband in pu (base SNom or UNom) (typical: 0..0.1)"
+    },
+    "photovoltaics_EMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "photovoltaics_EMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "photovoltaics_FDbd1Pu": {
+     "type": "DOUBLE",
+     "value": "0.004",
+     "doc": "Overfrequency deadband for governor response in pu (base omegaNom) (typical: 0.004)"
+    },
+    "photovoltaics_FDbd2Pu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Underfrequency deadband for governor response in pu (base omegaNom)^ (typical: 0.004)"
+    },
+    "photovoltaics_FEMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "photovoltaics_FEMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "photovoltaics_FreqFlag": {
+     "type": "BOOL",
+     "value": "true"
+    },
+    "photovoltaics_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.05",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "photovoltaics_IqFrzPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Constant reactive current injection value in pu (base UNom, SNom) (typical: -0.1 .. 0.1 pu)"
+    },
+    "photovoltaics_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "photovoltaics_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-2",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "photovoltaics_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "photovoltaics_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-20",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "photovoltaics_Kc": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reactive droop when VCompFlag = 0"
+    },
+    "photovoltaics_Ki": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Volt/VAR regulator integral gain"
+    },
+    "photovoltaics_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "photovoltaics_Kig": {
+     "type": "DOUBLE",
+     "value": "2.36",
+     "doc": "Droop regulator integral gain"
+    },
+    "photovoltaics_Kp": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Volt/VAR regulator proportional gain"
+    },
+    "photovoltaics_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "photovoltaics_Kpg": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Droop regulator proportional gain"
+    },
+    "photovoltaics_Kqi": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "photovoltaics_Kqp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "photovoltaics_Kqv": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "photovoltaics_Kvi": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "photovoltaics_Kvp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "photovoltaics_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "photovoltaics_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "photovoltaics_PFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Power reference flag: const. Pref (0) or consider generator speed (1)"
+    },
+    "photovoltaics_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Maximum plant level active power command in pu (base SNom)"
+    },
+    "photovoltaics_PMinPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Minimum plant level active power command in pu (base SNom)"
+    },
+    "photovoltaics_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "photovoltaics_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "photovoltaics_QFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "photovoltaics_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.4",
+     "doc": "Maximum plant level reactive power command in pu (base SNom)"
+    },
+    "photovoltaics_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.4",
+     "doc": "Minimum plant level reactive power command in pu (base SNom)"
+    },
+    "photovoltaics_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef)"
+    },
+    "photovoltaics_RSourcePu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Source resistance in pu (base UNom, SNom)"
+    },
+    "photovoltaics_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "photovoltaics_RefFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Plant level reactive power (0) or voltage control (1)"
+    },
+    "photovoltaics_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "photovoltaics_SNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "photovoltaics_VCompFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Reactive droop (0) or line drop compensation (1) if RefFlag true"
+    },
+    "photovoltaics_VDLIp11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "photovoltaics_VDLIp12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "photovoltaics_VDLIp21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "photovoltaics_VDLIp22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "photovoltaics_VDLIp31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "photovoltaics_VDLIp32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "photovoltaics_VDLIp41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "photovoltaics_VDLIp42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "photovoltaics_VDLIq11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "photovoltaics_VDLIq12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "photovoltaics_VDLIq21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "photovoltaics_VDLIq22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "photovoltaics_VDLIq31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "photovoltaics_VDLIq32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "photovoltaics_VDLIq41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "photovoltaics_VDLIq42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "photovoltaics_VDipPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "photovoltaics_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "photovoltaics_VFrz": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Voltage for freezing Volt/VAR regulator integrator (typical: 0..0.9)"
+    },
+    "photovoltaics_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "photovoltaics_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "photovoltaics_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "photovoltaics_VRef1Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "User-defined reference/bias on the inner-loop voltage control in pu (base UNom) (typical: 0 pu)"
+    },
+    "photovoltaics_VUpPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "photovoltaics_XPu": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef)"
+    },
+    "photovoltaics_XSourcePu": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Source reactance in pu (base UNom, SNom)"
+    },
+    "photovoltaics_tE": {
+     "type": "DOUBLE",
+     "value": "0.005"
+    },
+    "photovoltaics_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "photovoltaics_tFilterPC": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Voltage and reactive power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "photovoltaics_tFt": {
+     "type": "DOUBLE",
+     "value": "1e-5",
+     "doc": "Plant controller Q output lead time constant in s"
+    },
+    "photovoltaics_tFv": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller Q output lag time constant in s (typical: 0.15..5)"
+    },
+    "photovoltaics_tG": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "photovoltaics_tHoldIpMax": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Time delay for which the active current limit (ipMaxPu) is held after voltage dip in s"
+    },
+    "photovoltaics_tHoldIq": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Absolute value of tHoldIq defines seconds to hold current injection after voltage dip ended. tHoldIq > 0 for constant, 0 for no injection after voltage dip, tHoldIq < 0 for voltage-dependent injection (typical: -1 .. 1 s)"
+    },
+    "photovoltaics_tIq": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "photovoltaics_tLag": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller P output lag time constant in s(typical: 0.15..5)"
+    },
+    "photovoltaics_tP": {
+     "type": "DOUBLE",
+     "value": "0.04",
+     "doc": "Active power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "photovoltaics_tPord": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "photovoltaics_tRv": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "photovoltaics_P0Pu": "p_pu",
+    "photovoltaics_Q0Pu": "q_pu",
+    "photovoltaics_U0Pu": "v_pu",
+    "photovoltaics_UPhase0": "angle_pu"
+   },
+   "p_var": "photovoltaics_injector_PInjPu",
+   "q_var": "photovoltaics_injector_QInjPu",
+   "source": "borrowed from PhotovoltaicsWeccVoltageSourceB (Dynawo example examples/DynaSwing/WECC/PV/WECCPVVoltageSource/WECCPVVSource.par), WTG4AWeccCurrentSource (Dynawo example examples/DynaSwing/WECC/Wind/WECCWTG4ACurrentSource/WECCWTG4A.par)",
+   "missing": [],
+   "kind": "Solar PV",
+   "label": "WECC PV, voltage source (REPCA + REECA + REGCB)",
+   "category": "WECC",
+   "synchronized": true,
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: not at equilibrium without a disturbance (dP 3.98 MW, dV 0.0049 pu)",
+    "IEEE 14-Bus: not at equilibrium without a disturbance (dP 4.66 MW, dV 0.0014 pu)"
+   ]
+  },
+  "WT4AWeccCurrentSource": {
+   "prefix": "WT4A",
+   "params": {
+    "WT4A_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "WT4A_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-2",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "WT4A_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.05",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "WT4A_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "WT4A_Dshaft": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Damping coefficient in pu (typical: 1.5 pu, base SNom, omegaNom)"
+    },
+    "WT4A_Hg": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Generator Inertia in s (typical: 1 s)"
+    },
+    "WT4A_Ht": {
+     "type": "DOUBLE",
+     "value": "5"
+    },
+    "WT4A_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.3",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "WT4A_IqFrzPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Constant reactive current injection value (typical: -0.1 .. 0.1 pu)"
+    },
+    "WT4A_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "WT4A_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-1.1",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "WT4A_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WT4A_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-20",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "WT4A_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WT4A_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "WT4A_Kqi": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "WT4A_Kqp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "WT4A_Kqv": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "WT4A_Kshaft": {
+     "type": "DOUBLE",
+     "value": "200",
+     "doc": "Spring constant in pu (typical: 200 pu, base SNom, omegaNom)"
+    },
+    "WT4A_Kvi": {
+     "type": "DOUBLE",
+     "value": "0.7",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "WT4A_Kvp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "WT4A_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "WT4A_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "WT4A_PFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Power reference flag: const. Pref (0) or consider generator speed (1)"
+    },
+    "WT4A_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Active power upper limit in pu (base SNom) (typical: 1)"
+    },
+    "WT4A_PMinPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Active power lower limit in pu (base SNom) (typical: 0)"
+    },
+    "WT4A_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "WT4A_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "WT4A_QFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "WT4A_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.4",
+     "doc": "Reactive power upper limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "WT4A_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.4",
+     "doc": "Reactive power lower limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "WT4A_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WT4A_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "WT4A_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "WT4A_SNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "WT4A_VDLIp11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4A_VDLIp12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4A_VDLIp21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WT4A_VDLIp22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4A_VDLIp31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WT4A_VDLIp32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4A_VDLIp41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WT4A_VDLIp42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4A_VDLIq11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4A_VDLIq12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4A_VDLIq21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WT4A_VDLIq22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4A_VDLIq31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WT4A_VDLIq32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4A_VDLIq41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WT4A_VDLIq42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4A_VDipPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "WT4A_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "WT4A_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "WT4A_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "WT4A_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "WT4A_VRef1Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "User-defined reference/bias on the inner-loop voltage control (typical: 0 pu)"
+    },
+    "WT4A_VUpPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "WT4A_XPu": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WT4A_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "WT4A_tG": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "WT4A_tHoldIpMax": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Time delay for which the active current limit (ipMaxPu) is held after voltage dip vDip returns to zero for tHoldIpMax seconds at its value during the voltage dip"
+    },
+    "WT4A_tHoldIq": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Absolute value of tHoldIq defines seconds to hold current injection after voltage dip ended. tHoldIq > 0 for constant, 0 for no injection after voltage dip, tHoldIq < 0 for voltage-dependent injection (typical: -1 .. 1 s)"
+    },
+    "WT4A_tIq": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "WT4A_tP": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Filter time constant active power in s (typical: 0.1..0.2)"
+    },
+    "WT4A_tPord": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "WT4A_tRv": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "WT4A_P0Pu": "p_pu",
+    "WT4A_Q0Pu": "q_pu",
+    "WT4A_U0Pu": "v_pu",
+    "WT4A_UPhase0": "angle_pu"
+   },
+   "p_var": "WT4A_injector_PInjPu",
+   "q_var": "WT4A_injector_QInjPu",
+   "source": "Dynawo example nrt/data/WECCAdditionalModels/Wind/WT4ACurrentSource/WT4A.par",
+   "missing": [],
+   "kind": "Wind (type 4)",
+   "label": "WECC WT4A, no plant controller (REECA + REGCB + WTGTA)",
+   "category": "WECC",
+   "synchronized": false,
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "WT4BWeccCurrentSource": {
+   "prefix": "WT4B",
+   "params": {
+    "WT4B_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "WT4B_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-2",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "WT4B_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.05",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "WT4B_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "WT4B_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.3",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "WT4B_IqFrzPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Constant reactive current injection value (typical: -0.1 .. 0.1 pu)"
+    },
+    "WT4B_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "WT4B_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-1.1",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "WT4B_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WT4B_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-20",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "WT4B_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "WT4B_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "WT4B_Kqi": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "WT4B_Kqp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "WT4B_Kqv": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "WT4B_Kvi": {
+     "type": "DOUBLE",
+     "value": "0.7",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "WT4B_Kvp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "WT4B_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "WT4B_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "WT4B_PFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Power reference flag: const. Pref (0) or consider generator speed (1)"
+    },
+    "WT4B_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Active power upper limit in pu (base SNom) (typical: 1)"
+    },
+    "WT4B_PMinPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Active power lower limit in pu (base SNom) (typical: 0)"
+    },
+    "WT4B_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "WT4B_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "WT4B_QFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "WT4B_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.4",
+     "doc": "Reactive power upper limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "WT4B_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.4",
+     "doc": "Reactive power lower limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "WT4B_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WT4B_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "WT4B_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "WT4B_SNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "WT4B_VDLIp11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4B_VDLIp12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4B_VDLIp21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WT4B_VDLIp22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4B_VDLIp31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WT4B_VDLIp32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4B_VDLIp41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WT4B_VDLIp42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4B_VDLIq11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4B_VDLIq12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "WT4B_VDLIq21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "WT4B_VDLIq22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4B_VDLIq31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "WT4B_VDLIq32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4B_VDLIq41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "WT4B_VDLIq42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "WT4B_VDipPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "WT4B_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "WT4B_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "WT4B_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "WT4B_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "WT4B_VRef1Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "User-defined reference/bias on the inner-loop voltage control (typical: 0 pu)"
+    },
+    "WT4B_VUpPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "WT4B_XPu": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "WT4B_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "WT4B_tG": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "WT4B_tHoldIpMax": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Time delay for which the active current limit (ipMaxPu) is held after voltage dip vDip returns to zero for tHoldIpMax seconds at its value during the voltage dip"
+    },
+    "WT4B_tHoldIq": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Absolute value of tHoldIq defines seconds to hold current injection after voltage dip ended. tHoldIq > 0 for constant, 0 for no injection after voltage dip, tHoldIq < 0 for voltage-dependent injection (typical: -1 .. 1 s)"
+    },
+    "WT4B_tIq": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "WT4B_tP": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Filter time constant active power in s (typical: 0.1..0.2)"
+    },
+    "WT4B_tPord": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "WT4B_tRv": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "WT4B_P0Pu": "p_pu",
+    "WT4B_Q0Pu": "q_pu",
+    "WT4B_U0Pu": "v_pu",
+    "WT4B_UPhase0": "angle_pu"
+   },
+   "p_var": "WT4B_injector_PInjPu",
+   "q_var": "WT4B_injector_QInjPu",
+   "source": "Dynawo example nrt/data/WECCAdditionalModels/Wind/WT4BCurrentSource/WT4B.par",
+   "missing": [],
+   "kind": "Wind (type 4)",
+   "label": "WECC WT4B, no plant controller (REECA + REGCB)",
+   "category": "WECC",
+   "synchronized": false,
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "BESScbWeccCurrentSource": {
+   "prefix": "BESScb",
+   "params": {
+    "BESScb_DDn": {
+     "type": "DOUBLE",
+     "value": "126",
+     "doc": "Down regulation droop (typical: 20..33.3)"
+    },
+    "BESScb_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "BESScb_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "BESScb_DUp": {
+     "type": "DOUBLE",
+     "value": "126",
+     "doc": "Up regulation droop (typical: 0)"
+    },
+    "BESScb_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.05",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "BESScb_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "BESScb_DbdPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reactive power (RefFlag = 0) or voltage (RefFlag = 1) deadband in pu (base SNom or UNom) (typical: 0..0.1)"
+    },
+    "BESScb_EMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Maximum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "BESScb_EMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.1",
+     "doc": "Minimum Volt/VAR error in pu (base UNom or SNom)"
+    },
+    "BESScb_FDbd1Pu": {
+     "type": "DOUBLE",
+     "value": "0.00083",
+     "doc": "Overfrequency deadband for governor response in pu (base omegaNom) (typical: 0.004)"
+    },
+    "BESScb_FDbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.00083",
+     "doc": "Underfrequency deadband for governor response in pu (base omegaNom)^ (typical: 0.004)"
+    },
+    "BESScb_FEMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Maximum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "BESScb_FEMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum frequency error in droop regulator in pu (base omegaNom)"
+    },
+    "BESScb_FreqFlag": {
+     "type": "BOOL",
+     "value": "true"
+    },
+    "BESScb_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.11",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "BESScb_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "0.75",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "BESScb_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.75",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "BESScb_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "999"
+    },
+    "BESScb_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "BESScb_Kc": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reactive droop when VCompFlag = 0"
+    },
+    "BESScb_Ki": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Volt/VAR regulator integral gain"
+    },
+    "BESScb_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "BESScb_Kig": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Droop regulator integral gain"
+    },
+    "BESScb_Kp": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Volt/VAR regulator proportional gain"
+    },
+    "BESScb_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "BESScb_Kpg": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Droop regulator proportional gain"
+    },
+    "BESScb_Kqi": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "BESScb_Kqp": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "BESScb_Kqv": {
+     "type": "DOUBLE",
+     "value": "15",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "BESScb_Kvi": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "BESScb_Kvp": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "BESScb_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "BESScb_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "BESScb_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Active power upper limit in pu (base SNom) (typical: 1)"
+    },
+    "BESScb_PMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.667",
+     "doc": "Active power lower limit in pu (base SNom) (typical: 0)"
+    },
+    "BESScb_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "BESScb_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "BESScb_QFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "BESScb_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.75",
+     "doc": "Reactive power upper limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "BESScb_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.75",
+     "doc": "Reactive power lower limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "BESScb_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "BESScb_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "BESScb_RefFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Plant level reactive power (0) or voltage control (1)"
+    },
+    "BESScb_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "BESScb_SNom": {
+     "type": "DOUBLE",
+     "value": "6",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "BESScb_SOC0Pu": {
+     "type": "DOUBLE",
+     "value": "0.75",
+     "doc": "Initial state of charge in pu (base SNom)"
+    },
+    "BESScb_SOCMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.8",
+     "doc": "Maximum allowable state of charge in pu (base SNom) (typical: 0.8..1)"
+    },
+    "BESScb_SOCMinPu": {
+     "type": "DOUBLE",
+     "value": "0.2",
+     "doc": "Minimum allowable state of charge in pu (base SNom) (typical: 0..0.2)"
+    },
+    "BESScb_VCompFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Reactive droop (0) or line drop compensation (1) if RefFlag true"
+    },
+    "BESScb_VDLIp11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIp12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIp21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "BESScb_VDLIp22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIp31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "BESScb_VDLIp32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIp41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "BESScb_VDLIp42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIq11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIq12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIq21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "BESScb_VDLIq22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIq31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "BESScb_VDLIq32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIq41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "BESScb_VDLIq42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDipPu": {
+     "type": "DOUBLE",
+     "value": "-99",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "BESScb_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "BESScb_VFrz": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Voltage for freezing Volt/VAR regulator integrator (typical: 0..0.9)"
+    },
+    "BESScb_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "BESScb_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "BESScb_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "BESScb_VUpPu": {
+     "type": "DOUBLE",
+     "value": "99",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "BESScb_XPu": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "BESScb_tBattery": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Time it takes for the battery to discharge when putting out 1 pu power, in s (typically set to 9999 since most batteries are large as compared to the typical simulation time in a stability study)"
+    },
+    "BESScb_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "BESScb_tFilterPC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Voltage and reactive power filter time constant in s (typical: 0.01..0.02)"
+    },
+    "BESScb_tFt": {
+     "type": "DOUBLE",
+     "value": "1e-10",
+     "doc": "Plant controller Q output lead time constant in s"
+    },
+    "BESScb_tFv": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Plant controller Q output lag time constant in s (typical: 0.15..5)"
+    },
+    "BESScb_tG": {
+     "type": "DOUBLE",
+     "value": "0.017",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "BESScb_tIq": {
+     "type": "DOUBLE",
+     "value": "0.017",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "BESScb_tLag": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Plant controller P output lag time constant in s(typical: 0.15..5)"
+    },
+    "BESScb_tP": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Filter time constant active power in s (typical: 0.1..0.2)"
+    },
+    "BESScb_tPord": {
+     "type": "DOUBLE",
+     "value": "0.017",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "BESScb_tRv": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "BESScb_P0Pu": "p_pu",
+    "BESScb_Q0Pu": "q_pu",
+    "BESScb_U0Pu": "v_pu",
+    "BESScb_UPhase0": "angle_pu"
+   },
+   "p_var": "BESScb_injector_PInjPu",
+   "q_var": "BESScb_injector_QInjPu",
+   "source": "Dynawo example examples/DynaSwing/WECC/BESS/WECCBESScbCurrentSource/WECCBESScb.par",
+   "missing": [],
+   "kind": "Battery storage",
+   "label": "WECC BESS (REPCA + REECC + REGCB)",
+   "category": "WECC",
+   "synchronized": true,
+   "additional": true,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "BESScbWeccCurrentSourceNoPlantControl": {
+   "prefix": "BESScb",
+   "params": {
+    "BESScb_DPMaxPu": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Active power upper rate limit in pu/s (base SNom) (typical: > 0.1, set to 99 to disable)"
+    },
+    "BESScb_DPMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Active power lower rate limit in pu/s (base SNom) (typical: < -0.1, set to -99 to disable)"
+    },
+    "BESScb_Dbd1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.05",
+     "doc": "Overvoltage deadband for reactive current injection in pu (base UNom) (typical: -0.1..0)"
+    },
+    "BESScb_Dbd2Pu": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Undervoltage deadband for reactive current injection in pu (base UNom) (typical: 0..0.1)"
+    },
+    "BESScb_IMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.11",
+     "doc": "Maximal apparent current magnitude in pu (base UNom, SNom) (typical: 1..2)"
+    },
+    "BESScb_Iqh1Pu": {
+     "type": "DOUBLE",
+     "value": "0.75",
+     "doc": "Maximum reactive current injection (typical: 1..1.1) in pu (base UNom, SNom)"
+    },
+    "BESScb_Iql1Pu": {
+     "type": "DOUBLE",
+     "value": "-0.75",
+     "doc": "Minimum reactive current injection (typical: -1.1..-1) in pu (base UNom, SNom)"
+    },
+    "BESScb_IqrMaxPu": {
+     "type": "DOUBLE",
+     "value": "999"
+    },
+    "BESScb_IqrMinPu": {
+     "type": "DOUBLE",
+     "value": "-999",
+     "doc": "Minimum rate-of-change of reactive current after fault in pu (base UNom, SNom) (typical: -999..-1)"
+    },
+    "BESScb_KiPLL": {
+     "type": "DOUBLE",
+     "value": "20"
+    },
+    "BESScb_KpPLL": {
+     "type": "DOUBLE",
+     "value": "3",
+     "doc": "PLL proportional gain"
+    },
+    "BESScb_Kqi": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Integrator gain local reactive power PI controller"
+    },
+    "BESScb_Kqp": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Proportional gain local reactive power PI controller"
+    },
+    "BESScb_Kqv": {
+     "type": "DOUBLE",
+     "value": "15",
+     "doc": "K-Factor, reactive current injection gain (typical: 0..10)"
+    },
+    "BESScb_Kvi": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Integrator gain local voltage PI controller"
+    },
+    "BESScb_Kvp": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Proportional gain local voltage PI controller"
+    },
+    "BESScb_OmegaMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Upper frequency limit in pu (base omegaNom)"
+    },
+    "BESScb_OmegaMinPu": {
+     "type": "DOUBLE",
+     "value": "0.5",
+     "doc": "Lower frequency limit in pu (base omegaNom)"
+    },
+    "BESScb_PMaxPu": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Active power upper limit in pu (base SNom) (typical: 1)"
+    },
+    "BESScb_PMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.667",
+     "doc": "Active power lower limit in pu (base SNom) (typical: 0)"
+    },
+    "BESScb_PQFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q/P priority: Q priority (0) or P priority (1)"
+    },
+    "BESScb_PfFlag": {
+     "type": "BOOL",
+     "value": "false"
+    },
+    "BESScb_QFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Q control flag: const. pf or Q ctrl (0) or voltage/Q (1)"
+    },
+    "BESScb_QMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.75",
+     "doc": "Reactive power upper limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "BESScb_QMinPu": {
+     "type": "DOUBLE",
+     "value": "-0.75",
+     "doc": "Reactive power lower limit, when vFlag == 1 in pu (base SNom)"
+    },
+    "BESScb_RPu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Resistance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "BESScb_RateFlag": {
+     "type": "BOOL",
+     "value": "false",
+     "doc": "Active current (=false) or active power (=true) ramp (if unkown set to false)"
+    },
+    "BESScb_RrpwrPu": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Active current (power) recovery rate in pu/s (base UNom, SNom) (typical: 1..20)"
+    },
+    "BESScb_SNom": {
+     "type": "DOUBLE",
+     "value": "6",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "BESScb_SOC0Pu": {
+     "type": "DOUBLE",
+     "value": "0.75",
+     "doc": "Initial state of charge in pu (base SNom)"
+    },
+    "BESScb_SOCMaxPu": {
+     "type": "DOUBLE",
+     "value": "0.8",
+     "doc": "Maximum allowable state of charge in pu (base SNom) (typical: 0.8..1)"
+    },
+    "BESScb_SOCMinPu": {
+     "type": "DOUBLE",
+     "value": "0.2",
+     "doc": "Minimum allowable state of charge in pu (base SNom) (typical: 0..0.2)"
+    },
+    "BESScb_VDLIp11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIp12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIp21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "BESScb_VDLIp22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIp31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "BESScb_VDLIp32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIp41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "BESScb_VDLIp42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIq11": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIq12": {
+     "type": "DOUBLE",
+     "value": "1.1"
+    },
+    "BESScb_VDLIq21": {
+     "type": "DOUBLE",
+     "value": "1.15"
+    },
+    "BESScb_VDLIq22": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIq31": {
+     "type": "DOUBLE",
+     "value": "1.16"
+    },
+    "BESScb_VDLIq32": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDLIq41": {
+     "type": "DOUBLE",
+     "value": "1.17"
+    },
+    "BESScb_VDLIq42": {
+     "type": "DOUBLE",
+     "value": "1"
+    },
+    "BESScb_VDipPu": {
+     "type": "DOUBLE",
+     "value": "-99",
+     "doc": "Low voltage condition trigger voltage for FRT in pu (base UNom) (typical: 0..0.9)"
+    },
+    "BESScb_VFlag": {
+     "type": "BOOL",
+     "value": "true",
+     "doc": "Voltage control flag: voltage control (0) or Q ctrl (1)"
+    },
+    "BESScb_VMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.1",
+     "doc": "Maximum voltage at inverter terminal in pu (base UNom) (typical: 1.05..1.15)"
+    },
+    "BESScb_VMinPu": {
+     "type": "DOUBLE",
+     "value": "0.9",
+     "doc": "Minimum voltage at inverter terminal in pu (base UNom) (typical: 0.85..0.95)"
+    },
+    "BESScb_VRef0Pu": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Reference voltage for reactive current injection in pu (base UNom) (typical: 0.95..1.05)"
+    },
+    "BESScb_VUpPu": {
+     "type": "DOUBLE",
+     "value": "99",
+     "doc": "High voltage condition trigger voltage for FRT in pu (base UNom) (typical: 1.1..1.3)"
+    },
+    "BESScb_XPu": {
+     "type": "DOUBLE",
+     "value": "1e-6",
+     "doc": "Reactance of equivalent branch connection to the grid in pu (base SnRef, UNom)"
+    },
+    "BESScb_tBattery": {
+     "type": "DOUBLE",
+     "value": "999",
+     "doc": "Time it takes for the battery to discharge when putting out 1 pu power, in s (typically set to 9999 since most batteries are large as compared to the typical simulation time in a stability study)"
+    },
+    "BESScb_tFilterGC": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Filter time constant of terminal voltage in s(Cannot be set to zero, typical: 0.02..0.05)"
+    },
+    "BESScb_tG": {
+     "type": "DOUBLE",
+     "value": "0.017",
+     "doc": "Emulated delay in converter controls in s(Cannot be zero, typical: 0.02..0.05)"
+    },
+    "BESScb_tIq": {
+     "type": "DOUBLE",
+     "value": "0.017",
+     "doc": "Filter time constant reactive current in s(typical: 0.01..0.02)"
+    },
+    "BESScb_tP": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Filter time constant active power in s (typical: 0.1..0.2)"
+    },
+    "BESScb_tPord": {
+     "type": "DOUBLE",
+     "value": "0.017",
+     "doc": "Filter time constant inverter active power in s"
+    },
+    "BESScb_tRv": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Filter time constant terminal voltage in s(typical: 0.01..0.02)"
+    }
+   },
+   "references": {
+    "BESScb_P0Pu": "p_pu",
+    "BESScb_Q0Pu": "q_pu",
+    "BESScb_U0Pu": "v_pu",
+    "BESScb_UPhase0": "angle_pu"
+   },
+   "p_var": "BESScb_injector_PInjPu",
+   "q_var": "BESScb_injector_QInjPu",
+   "source": "borrowed from BESScbWeccCurrentSource (Dynawo example examples/DynaSwing/WECC/BESS/WECCBESScbCurrentSource/WECCBESScb.par)",
+   "missing": [],
+   "kind": "Battery storage",
+   "label": "WECC BESS, no plant controller (REECC + REGCB)",
+   "category": "WECC",
+   "synchronized": false,
+   "additional": true,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "GridFormingConverterDroopControl": {
+   "prefix": "control",
+   "params": {
+    "control_CFilter": {
+     "type": "DOUBLE",
+     "value": "0.066",
+     "doc": "Filter capacitance in pu (base UNom, SNom)"
+    },
+    "control_IMaxVI": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Maximum current before activating the virtual impedance in pu (base UNom, SNom)"
+    },
+    "control_Kff": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Gain of the active damping"
+    },
+    "control_Kic": {
+     "type": "DOUBLE",
+     "value": "1.19",
+     "doc": "Integral gain of the current loop"
+    },
+    "control_Kiv": {
+     "type": "DOUBLE",
+     "value": "1.161022",
+     "doc": "Integral gain of the voltage loop"
+    },
+    "control_KpVI": {
+     "type": "DOUBLE",
+     "value": "0.67",
+     "doc": "Proportional gain of the virtual impedance"
+    },
+    "control_Kpc": {
+     "type": "DOUBLE",
+     "value": "0.7388",
+     "doc": "Proportional gain of the current loop"
+    },
+    "control_Kpdc": {
+     "type": "DOUBLE",
+     "value": "50",
+     "doc": "Proportional gain of the dc voltage control"
+    },
+    "control_Kpv": {
+     "type": "DOUBLE",
+     "value": "0.52",
+     "doc": "Proportional gain of the voltage loop"
+    },
+    "control_LFilter": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Filter inductance in pu (base UNom, SNom)"
+    },
+    "control_Mp": {
+     "type": "DOUBLE",
+     "value": "0.02",
+     "doc": "Active power droop control coefficient"
+    },
+    "control_Mq": {
+     "type": "DOUBLE",
+     "value": "0.000",
+     "doc": "Reactive power droop control coefficient"
+    },
+    "control_RFilter": {
+     "type": "DOUBLE",
+     "value": "0.005",
+     "doc": "Filter resistance in pu (base UNom, SNom)"
+    },
+    "control_Wf": {
+     "type": "DOUBLE",
+     "value": "60",
+     "doc": "Cutoff pulsation of the active and reactive filters (in rad/s)"
+    },
+    "control_Wff": {
+     "type": "DOUBLE",
+     "value": "16.66",
+     "doc": "Cutoff pulsation of the active damping (in rad/s)"
+    },
+    "control_XRratio": {
+     "type": "DOUBLE",
+     "value": "5",
+     "doc": "X/R ratio of the virtual impedance"
+    },
+    "converter_CFilter": {
+     "type": "DOUBLE",
+     "value": "0.066",
+     "doc": "Filter capacitance in pu (base UNom, SNom)"
+    },
+    "converter_Cdc": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "DC capacitance in pu (base UdcNom, SNom)"
+    },
+    "converter_LFilter": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Filter inductance in pu (base UNom, SNom)"
+    },
+    "converter_LTransformer": {
+     "type": "DOUBLE",
+     "value": "0.2",
+     "doc": "Transformer inductance in pu (base UNom, SNom)"
+    },
+    "converter_RFilter": {
+     "type": "DOUBLE",
+     "value": "0.005",
+     "doc": "Filter resistance in pu (base UNom, SNom)"
+    },
+    "converter_RTransformer": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Transformer resistance in pu (base UNom, SNom)"
+    },
+    "converter_SNom": {
+     "type": "DOUBLE",
+     "value": "250",
+     "doc": "Nominal apparent power module for the converter",
+     "bind": "SNom"
+    }
+   },
+   "references": {
+    "converter_P0Pu": "p_pu",
+    "converter_Q0Pu": "q_pu",
+    "converter_U0Pu": "v_pu",
+    "converter_UPhase0": "angle_pu"
+   },
+   "p_var": "converter_PGenPu",
+   "q_var": "converter_QGenPu",
+   "source": "Dynawo example nrt/data/GridFormingConverters/GridFormingConverters.par",
+   "missing": [],
+   "kind": "Grid-forming converter",
+   "label": "Grid-forming converter, droop control",
+   "category": "GRID_FORMING_CONVERTER",
+   "synchronized": true,
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: not at equilibrium without a disturbance (dP 0.81 MW, dV 0.0037 pu)"
+   ]
+  },
+  "GridFormingConverterMatchingControl": {
+   "prefix": "control",
+   "params": {
+    "control_CFilter": {
+     "type": "DOUBLE",
+     "value": "0.066",
+     "doc": "Filter capacitance in pu (base UNom, SNom)"
+    },
+    "control_IMaxVI": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Maximum current before activating the virtual impedance in pu (base UNom, SNom)"
+    },
+    "control_KMatching": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Proportional gain of the matching control"
+    },
+    "control_Kic": {
+     "type": "DOUBLE",
+     "value": "1.19",
+     "doc": "Integral gain of the current loop"
+    },
+    "control_Kiv": {
+     "type": "DOUBLE",
+     "value": "1.161022",
+     "doc": "Integral gain of the voltage loop"
+    },
+    "control_KpVI": {
+     "type": "DOUBLE",
+     "value": "0.67",
+     "doc": "Proportional gain of the virtual impedance"
+    },
+    "control_Kpc": {
+     "type": "DOUBLE",
+     "value": "0.7388",
+     "doc": "Proportional gain of the current loop"
+    },
+    "control_Kpdc": {
+     "type": "DOUBLE",
+     "value": "50",
+     "doc": "Proportional gain of the dc voltage control"
+    },
+    "control_Kpv": {
+     "type": "DOUBLE",
+     "value": "0.52",
+     "doc": "Proportional gain of the voltage loop"
+    },
+    "control_LFilter": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Filter inductance in pu (base UNom, SNom)"
+    },
+    "control_RFilter": {
+     "type": "DOUBLE",
+     "value": "0.005",
+     "doc": "Filter resistance in pu (base UNom, SNom)"
+    },
+    "control_XRratio": {
+     "type": "DOUBLE",
+     "value": "5",
+     "doc": "X/R ratio of the virtual impedance"
+    },
+    "converter_CFilter": {
+     "type": "DOUBLE",
+     "value": "0.066",
+     "doc": "Filter capacitance in pu (base UNom, SNom)"
+    },
+    "converter_Cdc": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "DC capacitance in pu (base UdcNom, SNom)"
+    },
+    "converter_LFilter": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Filter inductance in pu (base UNom, SNom)"
+    },
+    "converter_LTransformer": {
+     "type": "DOUBLE",
+     "value": "0.2",
+     "doc": "Transformer inductance in pu (base UNom, SNom)"
+    },
+    "converter_RFilter": {
+     "type": "DOUBLE",
+     "value": "0.005",
+     "doc": "Filter resistance in pu (base UNom, SNom)"
+    },
+    "converter_RTransformer": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Transformer resistance in pu (base UNom, SNom)"
+    },
+    "converter_SNom": {
+     "type": "DOUBLE",
+     "value": "1000",
+     "doc": "Nominal apparent power module for the converter",
+     "bind": "SNom"
+    }
+   },
+   "references": {
+    "converter_P0Pu": "p_pu",
+    "converter_Q0Pu": "q_pu",
+    "converter_U0Pu": "v_pu",
+    "converter_UPhase0": "angle_pu"
+   },
+   "p_var": "converter_PGenPu",
+   "q_var": "converter_QGenPu",
+   "source": "Dynawo example nrt/data/GridFormingConverters/GridFormingConverters.par",
+   "missing": [],
+   "kind": "Grid-forming converter",
+   "label": "Grid-forming converter, matching control",
+   "category": "GRID_FORMING_CONVERTER",
+   "synchronized": true,
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "GridFormingConverterDispatchableVirtualOscillatorControl": {
+   "prefix": "control",
+   "params": {
+    "control_Alpha": {
+     "type": "DOUBLE",
+     "value": "5000",
+     "doc": "Parameter Alpha in the dVOC control in pu (base UNom, SNom)"
+    },
+    "control_CFilter": {
+     "type": "DOUBLE",
+     "value": "0.066",
+     "doc": "Filter capacitance in pu (base UNom, SNom)"
+    },
+    "control_Eta": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Parameter Eta in the dVOC control in pu (base UNom, SNom)"
+    },
+    "control_IMaxVI": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Maximum current before activating the virtual impedance in pu (base UNom, SNom)"
+    },
+    "control_KDvoc": {
+     "type": "DOUBLE",
+     "value": "1.570796325",
+     "doc": "Parameter KDvoc in the dVOC control in rad"
+    },
+    "control_Kic": {
+     "type": "DOUBLE",
+     "value": "1.19",
+     "doc": "Integral gain of the current loop"
+    },
+    "control_Kiv": {
+     "type": "DOUBLE",
+     "value": "1.161022",
+     "doc": "Integral gain of the voltage loop"
+    },
+    "control_KpVI": {
+     "type": "DOUBLE",
+     "value": "0.67",
+     "doc": "Proportional gain of the virtual impedance"
+    },
+    "control_Kpc": {
+     "type": "DOUBLE",
+     "value": "0.7388",
+     "doc": "Proportional gain of the current loop"
+    },
+    "control_Kpdc": {
+     "type": "DOUBLE",
+     "value": "50",
+     "doc": "Proportional gain of the dc voltage control"
+    },
+    "control_Kpv": {
+     "type": "DOUBLE",
+     "value": "0.52",
+     "doc": "Proportional gain of the voltage loop"
+    },
+    "control_LFilter": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Filter inductance in pu (base UNom, SNom)"
+    },
+    "control_RFilter": {
+     "type": "DOUBLE",
+     "value": "0.005",
+     "doc": "Filter resistance in pu (base UNom, SNom)"
+    },
+    "control_XRratio": {
+     "type": "DOUBLE",
+     "value": "5",
+     "doc": "X/R ratio of the virtual impedance"
+    },
+    "converter_CFilter": {
+     "type": "DOUBLE",
+     "value": "0.066",
+     "doc": "Filter capacitance in pu (base UNom, SNom)"
+    },
+    "converter_Cdc": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "DC capacitance in pu (base UdcNom, SNom)"
+    },
+    "converter_LFilter": {
+     "type": "DOUBLE",
+     "value": "0.15",
+     "doc": "Filter inductance in pu (base UNom, SNom)"
+    },
+    "converter_LTransformer": {
+     "type": "DOUBLE",
+     "value": "0.2",
+     "doc": "Transformer inductance in pu (base UNom, SNom)"
+    },
+    "converter_RFilter": {
+     "type": "DOUBLE",
+     "value": "0.005",
+     "doc": "Filter resistance in pu (base UNom, SNom)"
+    },
+    "converter_RTransformer": {
+     "type": "DOUBLE",
+     "value": "0.01",
+     "doc": "Transformer resistance in pu (base UNom, SNom)"
+    },
+    "converter_SNom": {
+     "type": "DOUBLE",
+     "value": "500",
+     "doc": "Nominal apparent power module for the converter",
+     "bind": "SNom"
+    }
+   },
+   "references": {
+    "converter_P0Pu": "p_pu",
+    "converter_Q0Pu": "q_pu",
+    "converter_U0Pu": "v_pu",
+    "converter_UPhase0": "angle_pu"
+   },
+   "p_var": "converter_PGenPu",
+   "q_var": "converter_QGenPu",
+   "source": "Dynawo example nrt/data/GridFormingConverters/GridFormingConverters.par",
+   "missing": [],
+   "kind": "Grid-forming converter",
+   "label": "Grid-forming converter, dispatchable virtual oscillator control",
+   "category": "GRID_FORMING_CONVERTER",
+   "synchronized": true,
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "GeneratorPQ": {
+   "prefix": "generator",
+   "params": {
+    "generator_AlphaPuPNom": {
+     "type": "DOUBLE",
+     "value": "0.1",
+     "doc": "Frequency sensitivity in pu (base PNom, OmegaNom)"
+    },
+    "generator_PMax": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Maximum active power in MW",
+     "bind": "PMax"
+    },
+    "generator_PMin": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Minimum active power in MW",
+     "bind": "PMin"
+    },
+    "generator_PNom": {
+     "type": "DOUBLE",
+     "value": "100",
+     "doc": "Nominal active power in MW",
+     "bind": "PNom"
+    }
+   },
+   "references": {
+    "generator_P0Pu": "p_pu",
+    "generator_Q0Pu": "q_pu",
+    "generator_U0Pu": "v_pu",
+    "generator_UPhase0": "angle_pu"
+   },
+   "p_var": "generator_PGenPu",
+   "q_var": "generator_QGenPu",
+   "source": "Dynawo example nrt/data/Network/Load/Modelica/FullModelica/DisconnectLoad.par",
+   "missing": [],
+   "kind": "Simplified generator",
+   "label": "Constant P/Q with frequency droop (GeneratorPQ)",
+   "category": "SYNCHRONIZED_GENERATOR",
+   "synchronized": true,
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: fault + line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))"
+   ]
+  },
+  "GeneratorPV": {
+   "prefix": "generator",
+   "params": {
+    "generator_AlphaPuPNom": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Frequency sensitivity in pu (base PNom, OmegaNom)"
+    },
+    "generator_LambdaPuSNom": {
+     "type": "DOUBLE",
+     "value": "0.21",
+     "doc": "Reactive power sensitivity of the voltage regulation in pu (base UNom, SNom)"
+    },
+    "generator_PMax": {
+     "type": "DOUBLE",
+     "value": "20",
+     "doc": "Maximum active power in MW",
+     "bind": "PMax"
+    },
+    "generator_PMin": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Minimum active power in MW",
+     "bind": "PMin"
+    },
+    "generator_PNom": {
+     "type": "DOUBLE",
+     "value": "15",
+     "doc": "Nominal active power in MW",
+     "bind": "PNom"
+    },
+    "generator_QMax": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Maximum reactive power in Mvar",
+     "bind": "QMax"
+    },
+    "generator_QMin": {
+     "type": "DOUBLE",
+     "value": "-10",
+     "doc": "Minimum reactive power in Mvar",
+     "bind": "QMin"
+    },
+    "generator_SNom": {
+     "type": "DOUBLE",
+     "value": "15",
+     "doc": "Apparent nominal power in MVA",
+     "bind": "SNom"
+    },
+    "generator_T": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Time constant used to filter the reactive power reference, in s"
+    }
+   },
+   "references": {
+    "generator_P0Pu": "p_pu",
+    "generator_Q0Pu": "q_pu",
+    "generator_U0Pu": "v_pu",
+    "generator_UPhase0": "angle_pu"
+   },
+   "p_var": "generator_PGenPu",
+   "q_var": "generator_QGenPu",
+   "source": "Dynawo example nrt/data/Network/Transformer/CPP/BaseCase/Test.par",
+   "missing": [],
+   "kind": "Simplified generator",
+   "label": "Constant P, voltage control within Q limits (GeneratorPV)",
+   "category": "SYNCHRONIZED_GENERATOR",
+   "synchronized": true,
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: fault + line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))"
+   ]
+  },
+  "InfiniteBus": {
+   "prefix": "infiniteBus",
+   "params": {},
+   "references": {
+    "infiniteBus_UPhase": "angle_pu",
+    "infiniteBus_UPu": "v_pu"
+   },
+   "p_var": null,
+   "q_var": null,
+   "source": "Dynawo example nrt/data/DynaFlow/GeneratorPVTfo/GeneratorPVTfo.par",
+   "missing": [],
+   "kind": "Grid equivalent",
+   "label": "Infinite bus (constant voltage and frequency)",
+   "category": "INFINITE_BUS",
+   "synchronized": false,
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: fault + line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))"
+   ]
+  },
+  "InertialGrid": {
+   "prefix": "inertialGrid",
+   "params": {
+    "inertialGrid_DPu": {
+     "type": "DOUBLE",
+     "value": "2"
+    },
+    "inertialGrid_Fh": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Fraction of the total power generated by the high pressure turbine (0...1)"
+    },
+    "inertialGrid_H": {
+     "type": "DOUBLE",
+     "value": "2.6",
+     "doc": "Inertia constant in s"
+    },
+    "inertialGrid_Km": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Mechanical power gain factor"
+    },
+    "inertialGrid_R": {
+     "type": "DOUBLE",
+     "value": "0.05",
+     "doc": "Governor droop in pu (base omegaNom/SNom)"
+    },
+    "inertialGrid_SNom": {
+     "type": "DOUBLE",
+     "value": "32350",
+     "doc": "Nominal apparent power in MVA",
+     "bind": "SNom"
+    },
+    "inertialGrid_Tr": {
+     "type": "DOUBLE",
+     "value": "15",
+     "doc": "Reheat time constant in s"
+    }
+   },
+   "references": {
+    "inertialGrid_P0Pu": "p_pu",
+    "inertialGrid_Q0Pu": "q_pu",
+    "inertialGrid_U0Pu": "v_pu",
+    "inertialGrid_UPhase0": "angle_pu"
+   },
+   "p_var": "inertialGrid_injectorURI_PInjPu",
+   "q_var": "inertialGrid_injectorURI_QInjPu",
+   "source": "Dynawo example nrt/data/DoubleInertialGrid/Test.par",
+   "missing": [],
+   "kind": "Grid equivalent",
+   "label": "Inertial grid (aggregate inertia + frequency response)",
+   "category": "INERTIAL_GRID",
+   "synchronized": false,
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: not at equilibrium without a disturbance (dP 169.23 MW, dV 0.0494 pu)",
+    "IEEE 14-Bus: not at equilibrium without a disturbance (dP 79.92 MW, dV 0.0057 pu)"
+   ]
+  }
+ },
+ "loads": {
+  "LoadAlphaBeta": {
+   "prefix": "load",
+   "params": {
+    "load_alpha": {
+     "type": "DOUBLE",
+     "value": "2.0",
+     "doc": "P exponent"
+    },
+    "load_beta": {
+     "type": "DOUBLE",
+     "value": "2.0",
+     "doc": "Q exponent"
+    }
+   },
+   "references": {
+    "load_P0Pu": "p_pu",
+    "load_Q0Pu": "q_pu",
+    "load_U0Pu": "v_pu",
+    "load_UPhase0": "angle_pu"
+   },
+   "p_var": "load_PPu",
+   "q_var": "load_QPu",
+   "source": "Dynawo example nrt/data/DynaFlow/StaticVarCompensators/SVarC_LoadVar/SVarCPV/SVarC.par",
+   "missing": [],
+   "label": "Voltage-dependent (exponential) P = P0 (U/U0)^alpha",
+   "category": "BASE_LOAD",
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "LoadPQ": {
+   "prefix": "load",
+   "params": {},
+   "references": {
+    "load_P0Pu": "p_pu",
+    "load_Q0Pu": "q_pu",
+    "load_U0Pu": "v_pu",
+    "load_UPhase0": "angle_pu"
+   },
+   "p_var": "load_PPu",
+   "q_var": "load_QPu",
+   "source": "Dynawo example nrt/data/DynaFlow/HvdcRpcl2/HvdcRpcl2.par",
+   "missing": [],
+   "label": "Constant power",
+   "category": "BASE_LOAD",
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: fault + line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))",
+    "IEEE 9-Bus: line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))",
+    "IEEE 14-Bus: fault + line trip stopped at t = 1.04 s (SimplifiedSolver fails to converge while minimum step size is reached ( DYNSolverCommonFixedTimeStep.cpp:366 ))"
+   ]
+  },
+  "LoadZIP": {
+   "prefix": "load",
+   "params": {
+    "load_Ip": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Current coefficient for active power"
+    },
+    "load_Iq": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Current coefficient for reactive power"
+    },
+    "load_Pp": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Power coefficient for active power"
+    },
+    "load_Pq": {
+     "type": "DOUBLE",
+     "value": "1",
+     "doc": "Power coefficient for reactive power"
+    },
+    "load_Zp": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Impedance coefficient for active power"
+    },
+    "load_Zq": {
+     "type": "DOUBLE",
+     "value": "0",
+     "doc": "Impedance coefficient for reactive power"
+    }
+   },
+   "references": {
+    "load_P0Pu": "p_pu",
+    "load_Q0Pu": "q_pu",
+    "load_U0Pu": "v_pu",
+    "load_UPhase0": "angle_pu"
+   },
+   "p_var": "load_PPu",
+   "q_var": "load_QPu",
+   "source": "Dynawo example nrt/data/DoubleInertialGrid/Test.par",
+   "missing": [],
+   "label": "ZIP (constant impedance / current / power mix)",
+   "category": "BASE_LOAD",
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: fault + line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))",
+    "IEEE 9-Bus: line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))",
+    "IEEE 14-Bus: fault + line trip stopped at t = 1.04 s (SimplifiedSolver fails to converge while minimum step size is reached ( DYNSolverCommonFixedTimeStep.cpp:366 ))"
+   ]
+  },
+  "LoadAlphaBetaRestorative": {
+   "prefix": "load",
+   "params": {
+    "load_Alpha": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Active load sensitivity to voltage"
+    },
+    "load_Beta": {
+     "type": "DOUBLE",
+     "value": "2.5",
+     "doc": "Reactive load sensitivity to voltage"
+    },
+    "load_UMaxPu": {
+     "type": "DOUBLE",
+     "value": "1.05",
+     "doc": "Maximum value of the voltage amplitude at terminal in pu (base UNom) that ensures the P/Q restoration"
+    },
+    "load_UMinPu": {
+     "type": "DOUBLE",
+     "value": "0.95",
+     "doc": "Minimum value of the voltage amplitude at terminal in pu (base UNom) that ensures the P/Q restoration"
+    },
+    "load_tFilter": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Time constant of the load restoration"
+    }
+   },
+   "references": {
+    "load_P0Pu": "p_pu",
+    "load_Q0Pu": "q_pu",
+    "load_U0Pu": "v_pu",
+    "load_UPhase0": "angle_pu"
+   },
+   "p_var": "load_PPu",
+   "q_var": "load_QPu",
+   "source": "Dynawo example nrt/data/DynaFlow/CentralizedShuntsRegulation/Shunt.par",
+   "missing": [],
+   "label": "Restorative (load recovery after voltage dips)",
+   "category": "BASE_LOAD",
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "LoadAlphaBetaRestorativeLimitsRecalc": {
+   "prefix": "load",
+   "params": {
+    "load_Alpha": {
+     "type": "DOUBLE",
+     "value": "1.5",
+     "doc": "Active load sensitivity to voltage"
+    },
+    "load_Beta": {
+     "type": "DOUBLE",
+     "value": "2.5",
+     "doc": "Reactive load sensitivity to voltage"
+    },
+    "load_UDeadBandPu": {
+     "type": "DOUBLE",
+     "value": "0.01"
+    },
+    "load_UMax0Pu": {
+     "type": "DOUBLE",
+     "value": "1.1499999999999999"
+    },
+    "load_UMin0Pu": {
+     "type": "DOUBLE",
+     "value": "0.84999999999999998"
+    },
+    "load_tFilter": {
+     "type": "DOUBLE",
+     "value": "10",
+     "doc": "Time constant of the load restoration"
+    }
+   },
+   "references": {
+    "load_P0Pu": "p_pu",
+    "load_Q0Pu": "q_pu",
+    "load_U0Pu": "v_pu",
+    "load_UPhase0": "angle_pu"
+   },
+   "p_var": "load_PPu",
+   "q_var": "load_QPu",
+   "source": "Dynawo example nrt/data/IEEE14/IEEE14_SyntaxExamples/IEEE14_MacroParameterSet/IEEE14.par",
+   "missing": [],
+   "label": "Restorative with recalculated limits",
+   "category": "BASE_LOAD",
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  },
+  "ElectronicLoad": {
+   "prefix": "load",
+   "params": {
+    "load_Ud1Pu": {
+     "type": "DOUBLE",
+     "value": "0.8",
+     "doc": "Voltage at which the load starts to disconnect in pu (base UNom)"
+    },
+    "load_Ud2Pu": {
+     "type": "DOUBLE",
+     "value": "0.6",
+     "doc": "Voltage at which the load is completely disconnected in pu (base UNom)"
+    },
+    "load_recoveringShare": {
+     "type": "DOUBLE",
+     "value": "0.7",
+     "doc": "Share of the load that recovers from low voltage trip"
+    }
+   },
+   "references": {
+    "load_P0Pu": "p_pu",
+    "load_Q0Pu": "q_pu",
+    "load_U0Pu": "v_pu",
+    "load_UPhase0": "angle_pu"
+   },
+   "p_var": "load_PPu",
+   "q_var": "load_QPu",
+   "source": "Dynawo example examples/DynaSwing/SingleMachineSystem/SingleMachineSystem_ElectronicLoad/SingleMachineSystem.par",
+   "missing": [],
+   "label": "Electronic load (trips / reconnects with voltage)",
+   "category": "BASE_LOAD",
+   "additional": false,
+   "verified": false,
+   "verification": [
+    "IEEE 9-Bus: fault + line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))",
+    "IEEE 9-Bus: line trip stopped at t = 1.00 s (KINSOL fails to solve the problem ( DYNSolverKINAlgRestoration.cpp:394 ))"
+   ]
+  },
+  "LoadAlphaBetaTwoMotorFifthOrder": {
+   "prefix": "load",
+   "params": {
+    "load_ActiveMotorShare_0_": {
+     "type": "DOUBLE",
+     "value": "0.2"
+    },
+    "load_ActiveMotorShare_1_": {
+     "type": "DOUBLE",
+     "value": "0.2"
+    },
+    "load_Alpha": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Active load sensitivity to voltage"
+    },
+    "load_Beta": {
+     "type": "DOUBLE",
+     "value": "2",
+     "doc": "Reactive load sensitivity to voltage"
+    },
+    "load_H_0_": {
+     "type": "DOUBLE",
+     "value": "0.1"
+    },
+    "load_H_1_": {
+     "type": "DOUBLE",
+     "value": "0.5"
+    },
+    "load_LPPPu_0_": {
+     "type": "DOUBLE",
+     "value": "0.104"
+    },
+    "load_LPPPu_1_": {
+     "type": "DOUBLE",
+     "value": "0.14"
+    },
+    "load_LPPu_0_": {
+     "type": "DOUBLE",
+     "value": "0.12"
+    },
+    "load_LPPu_1_": {
+     "type": "DOUBLE",
+     "value": "0.19"
+    },
+    "load_LsPu_0_": {
+     "type": "DOUBLE",
+     "value": "1.8"
+    },
+    "load_LsPu_1_": {
+     "type": "DOUBLE",
+     "value": "1.8"
+    },
+    "load_RsPu_0_": {
+     "type": "DOUBLE",
+     "value": "0.04"
+    },
+    "load_RsPu_1_": {
+     "type": "DOUBLE",
+     "value": "0.03"
+    },
+    "load_Ureconnect1Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.1"
+    },
+    "load_Ureconnect1Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.65"
+    },
+    "load_Ureconnect2Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.65"
+    },
+    "load_Ureconnect2Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.60"
+    },
+    "load_Utrip1Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.65"
+    },
+    "load_Utrip1Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.55"
+    },
+    "load_Utrip2Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.5"
+    },
+    "load_Utrip2Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.5"
+    },
+    "load_shareTrip1Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.2"
+    },
+    "load_shareTrip1Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.3"
+    },
+    "load_shareTrip2Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.75"
+    },
+    "load_shareTrip2Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.3"
+    },
+    "load_tP0_0_": {
+     "type": "DOUBLE",
+     "value": "0.095"
+    },
+    "load_tP0_1_": {
+     "type": "DOUBLE",
+     "value": "0.2"
+    },
+    "load_tPP0_0_": {
+     "type": "DOUBLE",
+     "value": "0.0021"
+    },
+    "load_tPP0_1_": {
+     "type": "DOUBLE",
+     "value": "0.0026"
+    },
+    "load_tReconnect1Pu_0_": {
+     "type": "DOUBLE",
+     "value": "9999"
+    },
+    "load_tReconnect1Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.05"
+    },
+    "load_tReconnect2Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.1"
+    },
+    "load_tReconnect2Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.05"
+    },
+    "load_tTrip1Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.1"
+    },
+    "load_tTrip1Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.02"
+    },
+    "load_tTrip2Pu_0_": {
+     "type": "DOUBLE",
+     "value": "0.02"
+    },
+    "load_tTrip2Pu_1_": {
+     "type": "DOUBLE",
+     "value": "0.025"
+    },
+    "load_torqueExponent_0_": {
+     "type": "DOUBLE",
+     "value": "0"
+    },
+    "load_torqueExponent_1_": {
+     "type": "DOUBLE",
+     "value": "2"
+    }
+   },
+   "references": {
+    "load_P0Pu": "p_pu",
+    "load_Q0Pu": "q_pu",
+    "load_U0Pu": "v_pu",
+    "load_UPhase0": "angle_pu"
+   },
+   "p_var": "load_PPu",
+   "q_var": "load_QPu",
+   "source": "Dynawo example examples/DynaSwing/SingleMachineSystem/SingleMachineSystem_LoadAlphaBetaMotorFifthOrder/SingleMachineSystem.par",
+   "missing": [],
+   "label": "Alpha-beta load with two fifth-order induction motors",
+   "category": "BASE_LOAD",
+   "additional": false,
+   "verified": true,
+   "verification": [
+    "flat start + fault/trip/load-step on IEEE 9 and IEEE 14"
+   ]
+  }
+ }
+}

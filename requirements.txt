@@ -1,0 +1,7 @@
+pypowsybl>=1.16
+streamlit>=1.50
+plotly>=6
+pandas>=2.2
+numpy>=2.0
+cvxpy>=1.6
+pytest>=8

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GridScope: external variables of the Modelica class of the same name -->
+<external_variables xmlns="http://www.rte-france.com/dynawo">
+  <variable type="continuous" id="omegaMonitoredPu"/>
+  <variable type="continuous" id="UMonitoredPu"/>
+  <variable type="continuous" id="thetaMonitored"/>
+</external_variables>

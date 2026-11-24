@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<parametersSet xmlns="http://www.rte-france.com/dynawo">
+    <!-- IDA order 2 solver -->
+    <set id="IDA">
+        <par type="INT" name="order" value="2"/>
+        <par type="DOUBLE" name="initStep" value="0.000001"/>
+        <par type="DOUBLE" name="minStep" value="0.000001"/>
+        <par type="DOUBLE" name="maxStep" value="10"/>
+        <par type="DOUBLE" name="absAccuracy" value="1e-4"/>
+        <par type="DOUBLE" name="relAccuracy" value="1e-4"/>
+    </set>
+    <!-- Simplified (fixed-step, implicit Euler) solver: robust through faults and stiff controller
+         dynamics. hMax = 10 ms keeps transient-stability accuracy. -->
+    <set id="SIM">
+        <par type="DOUBLE" name="hMin" value="0.000001"/>
+        <par type="DOUBLE" name="hMax" value="0.01"/>
+        <par type="DOUBLE" name="kReduceStep" value="0.5"/>
+        <par type="INT" name="maxNewtonTry" value="10"/>
+        <par type="STRING" name="linearSolverName" value="KLU"/>
+        <par type="BOOL" name="recalculateStep" value="true"/>
+        <!-- the fixed-step solver defaults this to 0.1 s, which no 10 ms step can satisfy -->
+        <par type="DOUBLE" name="minimalAcceptableStep" value="0.000001"/>
+        <par type="INT" name="maximumNumberSlowStepIncrease" value="1000"/>
+    </set>
+</parametersSet>
