@@ -709,6 +709,7 @@ def _curves(r, quantities, elements, t_start, t_end, dt) -> dict:
             continue
         grid = np.arange(df.index.min(), df.index.max() + 1e-9, dt) if dt else df.index.values
         # sample with the value at or just before each grid time (keeps fault steps sharp)
+        df = df.sort_index(kind='stable')            # IDA (variable step) output is not always monotonic
         s = df[~df.index.duplicated(keep='last')].reindex(grid, method='ffill')
         s.index.name = 't'
         out[q] = dict(unit=QUANTITY_UNITS[q], **_table(s.reset_index()))

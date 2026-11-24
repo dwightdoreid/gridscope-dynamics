@@ -181,3 +181,14 @@ def test_dynamic_simulation_curves_and_studies():
         err, msg = await call('get_dynamic_curves', case_id=cid, quantities=['angles'])
         assert err and 'run_dynamic_simulation first' in msg
     session(steps)
+
+
+def test_curves_resample_non_monotonic_solver_output():
+    """IDA (variable step) can return time stamps out of order and repeated; sampling must still work."""
+    import pandas as pd
+
+    class R:
+        voltages = pd.DataFrame({'5': [1.0, 0.2, 0.9, 0.95, 0.97]}, index=[0.0, 1.0, 1.1, 1.05, 1.1])
+    out = M._curves(R, ['voltages'], None, None, None, 0.05)['voltages']
+    t = [row[0] for row in out['rows']]
+    assert t == sorted(t) and out['rows'][-1][1] == 0.97
