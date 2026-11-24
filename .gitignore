@@ -12,3 +12,6 @@ vendor/
 
 # Cases shared with LLM clients through the MCP server (run_mcp.sh)
 workspace/
+
+# Study work in progress (scripts, results, papers), kept out of git for now
+studies/
