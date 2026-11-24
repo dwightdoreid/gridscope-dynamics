@@ -36,6 +36,36 @@ def test_every_view_renders(at):
         _no_errors(at)
 
 
+def test_diagram_style_switch(at):
+    at.session_state['view'] = 'network'
+    at.run()
+    style = [r for r in at.radio if r.key == 'diag_style'][0]
+    style.set_value('Standard').run()
+    _no_errors(at)
+    assert any('bus bar' in m.value for m in at.markdown)       # legend switches to the standard symbols
+    [r for r in at.radio if r.key == 'diag_style'][0].set_value('Schematic').run()
+    _no_errors(at)
+
+
+def test_diagram_edit_mode_and_property_panel(at):
+    at.session_state['view'] = 'network'
+    at.run()
+    [t for t in at.toggle if t.key == 'diag_edit'][0].set_value(True).run()
+    _no_errors(at)
+    at.session_state['inspect'] = ['bus', '9']
+    at.run()
+    load_p = [n for n in at.number_input if n.label == 'Load P (MW)'][0]
+    assert load_p.value == 29.5
+    load_p.set_value(40.0)
+    [b for b in at.button if b.label == 'Apply'][0].click().run()
+    _no_errors(at)
+    assert next(b for b in at.session_state['case']['buses'] if b['id'] == 9)['Pd'] == 40.0
+    assert at.session_state['sld_undo']                         # the panel edit can be undone
+    at.session_state['case'] = at.session_state['sld_undo'][-1]  # put the case back for the later tests
+    [t for t in at.toggle if t.key == 'diag_edit'][0].set_value(False).run()
+    _no_errors(at)
+
+
 def test_steady_state_studies_from_ui(at):
     at.session_state['view'] = 'network'
     at.run()

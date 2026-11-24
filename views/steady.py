@@ -11,7 +11,8 @@ import streamlit as st
 from gridscope import case as C
 from gridscope import contingency, faults, loadflow, opf
 from views import common as U
-from views.diagram import build_figure
+from views import editor as E
+from views.diagram import STYLES, build_scene, to_plotly
 
 
 # =============================================================== load flow
@@ -33,16 +34,38 @@ def run_ac_load_flow():
 
 # ================================================================= network
 
+_DIAG_KEYS = ('diag_edit', 'diag_style', 'diag_mode')
+
+
 def view_network():
+    # Streamlit forgets a widget's value on runs where it isn't drawn (another view): keep a copy
+    ss = st.session_state
+    for k in _DIAG_KEYS:
+        if k not in ss and f'_{k}' in ss:
+            ss[k] = ss[f'_{k}']
+    try:
+        _view_network()
+    finally:
+        for k in _DIAG_KEYS:
+            if k in ss:
+                ss[f'_{k}'] = ss[k]
+
+
+def _view_network():
     c = U.case()
     ac, ac_stale = U.get_result('ac')
     dyn_res, _ = U.get_result('dyn_sim')
     left, right = st.columns([2, 1], gap='medium')
     with left:
         with st.container(border=True):
-            h1, h2 = st.columns([3, 2])
+            h1, h4, h3, h2 = st.columns([1.5, 1.0, 1.8, 1.7], vertical_alignment='center')
             with h1:
                 U.card_header('Single-Line Diagram')
+            with h4:
+                editing = st.toggle('✎ Edit', key='diag_edit')
+            with h3:
+                style = st.radio('Style', STYLES, horizontal=True, label_visibility='collapsed', key='diag_style',
+                                 help='Schematic: round bus nodes. Standard: bus bars and IEC/IEEE symbols.')
             overlay, open_br = None, ()
             with h2:
                 modes = ['Load flow'] + (['Dynamic simulation'] if dyn_res is not None and len(dyn_res.voltages) else [])
@@ -58,25 +81,34 @@ def view_network():
                 open_br = tuple(e.element for e in st.session_state.get('dyn_events_used', [])
                                 if (e.type == 'Trip branch' and e.start <= t[k]) or
                                 (e.type == 'Line fault' and e.side != 'NONE' and e.start + e.duration <= t[k]))
+            symbols = ('<span>▬ bus bar &nbsp; ━ line &nbsp; ⚭ transformer &nbsp; Ⓖ generator &nbsp; ▼ load'
+                       ' &nbsp; ⊣⊢ shunt &nbsp; ┈ open</span>' if style == 'Standard' else
+                       '<span>━ line &nbsp; ╍ transformer &nbsp; ┈ open</span>')
             st.markdown(
                 '<div class="gs-legend"><span><i class="dot" style="background:#fb7185"></i>Slack</span>'
                 '<span><i class="dot" style="background:#4ea1ff"></i>PV</span>'
                 '<span><i class="dot" style="background:#94a3b8"></i>PQ</span>'
-                '<span>━ line &nbsp; ╍ transformer &nbsp; ┈ open</span>'
+                + symbols
+                + ('<span><b style="color:#facc15">editing</b>: changes apply to the network</span>' if editing else '')
                 + ('<span>colour = bus voltage: <b style="color:#fb7185">0.90</b> → <b style="color:#34d399">1.00</b>'
                    ' → <b style="color:#a78bfa">1.10</b> pu</span>' if overlay else
                    '<span>branch colour/width = loading</span>') + '</div>', unsafe_allow_html=True)
-            fig = build_figure(c, None if ac_stale else ac, overlay, open_br)
-            ev = st.plotly_chart(fig, key='sld', on_select='rerun', selection_mode='points',
-                                 config=dict(displaylogo=False, scrollZoom=True,
-                                             modeBarButtonsToRemove=['select2d', 'lasso2d']))
-            pts = (ev or {}).get('selection', {}).get('points', []) if ev else []
-            if pts and pts[0].get('customdata'):
-                st.session_state.inspect = pts[0]['customdata'][:2]
+            scene = build_scene(c, None if ac_stale else ac, overlay, open_br, style=style)
+            if editing:
+                E.render(scene, height=610)
+            else:
+                ev = st.plotly_chart(to_plotly(scene, 610), key='sld', on_select='rerun', selection_mode='points',
+                                     config=dict(displaylogo=False, scrollZoom=True,
+                                                 modeBarButtonsToRemove=['select2d', 'lasso2d']))
+                pts = (ev or {}).get('selection', {}).get('points', []) if ev else []
+                if pts and pts[0].get('customdata'):
+                    st.session_state.inspect = pts[0]['customdata'][:2]
     with right:
         with st.container(border=True):
             U.card_header('Selected Element')
-            _inspector(c, None if ac_stale else ac)
+            sel = st.session_state.get('inspect')
+            if not (editing and sel and E.property_form(U.case(), sel)):
+                _inspector(c, None if ac_stale else ac)
         with st.container(border=True):
             U.card_header('AC Solver Options')
             st.selectbox('Generator reactive-limit enforcement', [True, False], key='enforce_q',
@@ -95,9 +127,26 @@ def view_network():
 def _inspector(c, ac):
     sel = st.session_state.get('inspect')
     if not sel:
-        U.notice('Click a bus or branch to inspect it.')
+        U.notice('Click a bus or branch to inspect it.' + (' Turn on ✎ Edit to change the network in the diagram.'
+                                                          if not st.session_state.get('diag_edit') else
+                                                          ' Use the toolbar in the diagram to add elements.'))
         return
     kind, eid = sel
+    if kind == 'gen':
+        g = next((x for x in c['generators'] if str(x['id']) == eid), None)
+        if g is None:
+            return
+        rows = [('Bus', str(g['bus'])), ('P / Q', f'{g["Pg"]} MW / {g["Qg"]} MVAr'), ('V set', f'{g["Vg"]} pu'),
+                ('P range', f'{g["Pmin"]} – {g["Pmax"]} MW'), ('Q range', f'{g["Qmin"]} – {g["Qmax"]} MVAr'),
+                ('Status', 'in service' if C._num(g.get('status'), 1) else 'out of service')]
+        if ac and ac.get('converged') and 'generators' in ac:
+            r = ac['generators'][ac['generators'].id.astype(str) == eid]
+            if len(r):
+                rows.append(('Solved output', f'{r.iloc[0].P:.2f} MW / {r.iloc[0].Q:.2f} MVAr'))
+        html = f'<h4 style="margin:0 0 8px">{eid} <span class="gs-badge">generator</span></h4>' + ''.join(
+            f'<div class="gs-kv"><span>{k}</span><b>{v}</b></div>' for k, v in rows)
+        st.markdown(html, unsafe_allow_html=True)
+        return
     if kind == 'bus':
         b = next((b for b in c['buses'] if str(b['id']) == eid), None)
         if b is None:

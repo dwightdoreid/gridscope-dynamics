@@ -46,7 +46,7 @@ To use governor / AVR / PSS combinations that Dynawo doesn't ship pre-assembled,
 
 | View | GridScope | Here (engine) |
 |---|---|---|
-| Network Diagram | SVG single-line diagram, inspector, solver options, log | Same, plus a **dynamic replay**: bus voltages over time with tripped branches drawn open (plotly) |
+| Network Diagram | SVG single-line diagram, inspector, solver options, log | Same, plus a **Standard** drawing style (bus bars, two-circle transformers, generator / load / shunt symbols) next to GridScope's **Schematic** style, a **diagram editor** (✎ Edit: move buses, add / delete elements, edit properties, build a network from scratch), and a **dynamic replay**: bus voltages over time with tripped branches drawn open |
 | Bus / Branch / Generator Data | Editable, sortable tables | Same columns. Add rows at the bottom, select rows + Delete to remove |
 | Analysis Results | AC Newton–Raphson, Q-limit PV→PQ switching | **PowSyBl OpenLoadFlow**, configured to behave like GridScope (below), plus a **Generator Results** table: final P/Q per generator, ΔP vs schedule, voltage vs set-point, limit flags |
 | Contingency (N-1) | DC and AC branch-outage screening | **PowSyBl security analysis**, DC or AC, with islanding detection |
@@ -54,6 +54,19 @@ To use governor / AVR / PSS combinations that Dynawo doesn't ship pre-assembled,
 | Short-Circuit / Faults | IEC 60909 / ANSI, 3ph/SLG/LL/LLG, K_G/K_T, min/max case | **numpy port of GridScope's own engine** |
 | Profiles & Charts | Voltage magnitude and angle | Same, plus branch loading |
 | **Dynamic Stability** ✦ | *(roadmap item in GridScope)* | **Dynawo** via `pypowsybl.dynamic` |
+
+### Editing the network in the diagram
+
+Turn on **✎ Edit** above the Single-Line Diagram (works in both the Schematic and the Standard style):
+
+* **Move**: drag a bus; its symbols and branches follow, and the layout is redrawn when you let go. **Snap** rounds positions to a grid.
+* **Add**: pick a tool in the diagram's toolbar — bus (click an empty spot), line or transformer (click two buses), generator, load or shunt (click a bus). A new bus takes the voltage level of the nearest bus; the first bus of an empty network is the Slack bus; adding a generator to a PQ bus makes it a PV bus. Esc returns to the select tool.
+* **Edit properties**: click any bus, line, transformer or generator; its fields (impedances, ratings, tap, loads, shunts, set-points, limits, status) are editable in the **Selected Element** panel.
+* **Delete**: select an element and press **Del** (or 🗑). Deleting a bus also removes its branches and generators.
+* **Undo**: ↶ or Ctrl+Z, for diagram and panel edits.
+* Pan by dragging the background, zoom with the mouse wheel, ⤢ fits the view.
+
+Every edit goes through the same validation as the data tables (sidebar), and results computed before it are marked out of date. Positions are the bus `x` / `y` of the GridScope JSON, so a network built here still opens in GridScope. To build from scratch: **＋ New**, then ✎ Edit.
 
 ### Dynamic Stability
 

@@ -68,6 +68,9 @@ def set_case(case: dict):
     ss = st.session_state
     ss.case = C.normalise(case)
     ss.case_version = ss.get('case_version', 0) + 1
+    ss.case_load = ss.get('case_load', 0) + 1      # a different network: the diagram editor re-fits, undo clears
+    ss.sld_undo = []
+    ss.inspect = None
     ss.results = {}
     ss.status = f'Loaded {ss.case["name"]}'
     for k in [k for k in ss.keys() if str(k).startswith('ed_')]:
