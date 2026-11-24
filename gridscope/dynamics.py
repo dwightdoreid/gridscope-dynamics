@@ -89,22 +89,40 @@ def _bound_values(snom, pnom, gen, p0, q0):
     return dict(SNom=snom, PNom=pnom, PMax=pmax, PMin=pmin, QMax=qmax, QMin=qmin)
 
 
-def source_parameters(source: str, overrides: dict | None = None, load: bool = False) -> list[dict]:
-    """Rows describing the user-facing parameters of a source (or load) model."""
+SN_REF = 100.0      # MVA, Dynawo's system base
+
+
+def system_base_impedance(key: str, q: dict) -> bool:
+    """The coupling branch R / X of a WECC converter model: Dynawo takes them in pu of the 100 MVA system
+    base, while the library defaults (from Dynawo's examples) are values for a 100 MVA plant."""
+    return key.endswith(('_RPu', '_XPu')) and 'base SnRef' in q.get('doc', '')
+
+
+def source_parameters(source: str, overrides: dict | None = None, load: bool = False,
+                      snom: float | None = None) -> list[dict]:
+    """Rows describing the user-facing parameters of a source (or load) model.
+
+    With snom (the plant rating, MVA), a system-base coupling impedance left at its default is scaled to
+    the plant: the default is read as pu of the plant's own rating and converted to the 100 MVA base
+    (0.15 pu on a 763 MVA plant -> 0.0197 pu). A value set explicitly is used as given (100 MVA base)."""
     lib = SOURCE_LIB['loads' if load else 'sources'][source]
     overrides = overrides or {}
     rows = []
     for k, q in lib['params'].items():
+        value = overrides.get(k, q['value'])
+        scaled = bool(snom) and k not in overrides and system_base_impedance(k, q) and q['value'] not in (None, '')
+        if scaled:
+            value = f"{float(q['value']) * SN_REF / float(snom):.6g}"
         rows.append(dict(key=k, name=k.split('_', 1)[-1], type=q['type'], default=q['value'],
-                         value=str(overrides.get(k, q['value'])), doc=q.get('doc', ''), bind=q.get('bind'),
-                         source=lib.get('source', '')))
+                         value=str(value), doc=q.get('doc', ''), bind=q.get('bind'),
+                         source=lib.get('source', ''), scaled_to_rating=scaled))
     return rows
 
 
 def _model_par_set(set_id: str, model: str, overrides: dict | None, bound: dict, load=False) -> str:
     lib = SOURCE_LIB['loads' if load else 'sources'][model]
     lines = [f'  <set id="{set_id}">']
-    for row in source_parameters(model, overrides, load):
+    for row in source_parameters(model, overrides, load, snom=None if load else bound.get('SNom')):
         v = bound[row['bind']] if row['bind'] else row['value']
         if v in (None, '', 'None'):
             raise ValueError(f'{model}: parameter {row["name"]} has no value — set it in the model editor.')
@@ -841,9 +859,76 @@ SOLVERS = {'SIM': 'Simplified (fixed 10 ms step, robust through faults)',
            'IDA': 'IDA (variable step; may fail at faults with IEEE controllers)'}
 
 
+def converter_losses(case: dict, events: list[Event]) -> list[tuple[str, float, str]]:
+    """Converter-interfaced generators the events would disconnect: tripped directly, or left in an island
+    with no synchronous machine or grid-forming source (a grid-following converter cannot hold an island; its
+    protection trips it). Returns [(generator id, MW, time and cause)] in event order.
+
+    Dynawo (1.7, through pypowsybl) cannot disconnect converter models: its solver fails at the instant of the
+    disconnection, for every converter model and both solvers. simulate() therefore refuses these cases with a
+    clear NOT_SIMULATED result instead of a solver failure that would read as instability."""
+    kinds = {}
+    for g in case['generators']:
+        if not _num(g.get('status'), 1):
+            continue
+        d = default_dyn_params(g, case)
+        forming = is_sync(d) or SOURCE_LIB['sources'][d['source']]['category'] != 'WECC'
+        kinds[str(g['id'])] = (forming, str(g['bus']), _num(g.get('Pg'), 0.0))
+    if all(f for f, _, _ in kinds.values()) and not any(
+            e.type == 'Trip generator' and not kinds.get(str(e.element), (True,))[0] for e in events):
+        return []
+    opens = [(e.start, 'Trip branch', e.element) for e in events if e.type == 'Trip branch']
+    opens += [(e.start + e.duration, 'Line fault', e.element) for e in events
+              if e.type == 'Line fault' and e.side != 'NONE']
+    trips = [(e.start, 'Trip generator', str(e.element)) for e in events if e.type == 'Trip generator']
+    lost, done = [], set()
+    for t in sorted({x[0] for x in opens + trips}):
+        opened = {el for tt, _, el in opens if tt <= t + 1e-9}
+        tripped = {el for tt, _, el in trips if tt <= t + 1e-9}
+        for g in sorted(tripped - done):
+            if g in kinds and not kinds[g][0]:
+                lost.append((g, kinds[g][2], f'tripped at t = {t:g} s'))
+                done.add(g)
+        nbrs = {str(b['id']): set() for b in case['buses']}
+        for br in case['branches']:
+            if _num(br.get('status'), 1) and br['id'] not in opened:
+                f, to = str(br['from']), str(br['to'])
+                if f in nbrs and to in nbrs:
+                    nbrs[f].add(to)
+                    nbrs[to].add(f)
+        comp, k = {}, 0
+        for s in nbrs:
+            if s in comp:
+                continue
+            comp[s], stack = k, [s]
+            while stack:
+                u = stack.pop()
+                for v in nbrs[u]:
+                    if v not in comp:
+                        comp[v] = k
+                        stack.append(v)
+            k += 1
+        held = {comp.get(b) for g, (forming, b, _) in kinds.items() if forming and g not in tripped}
+        for g, (forming, b, pg) in kinds.items():
+            if not forming and g not in done and g not in tripped and comp.get(b) not in held:
+                lost.append((g, pg, f'islanded without a synchronous or grid-forming source at t = {t:g} s'))
+                done.add(g)
+    return lost
+
+
 def simulate(case: dict, events: list[Event], stop_time=10.0, load_alpha=2.0, load_beta=2.0,
              angle_limit=180.0, prepared: Prepared | None = None, record_buses: list | None = None,
              solver: str = 'SIM') -> DynResult:
+    lost = converter_losses(case, events)
+    if lost:
+        mw = sum(pg for _, pg, _ in lost)
+        what = '; '.join(f'{g} ({pg:.0f} MW) {why}' for g, pg, why in lost)
+        dead, gens_lost = islanding(case, events)
+        return DynResult('NOT_SIMULATED', 'converter disconnection', None,
+                         f'Not simulated: the events disconnect converter-interfaced generation — {what}. Dynawo '
+                         f'cannot disconnect converter models (its solver fails), so assess this case as the loss '
+                         f'of {mw:.0f} MW of generation (e.g. a frequency study tripping an equivalent synchronous '
+                         f'unit).', islanded_buses=dead, lost_gens=gens_lost)
     if not any(e.type == 'Line fault' for e in events):
         return _simulate(case, events, stop_time, load_alpha, load_beta, angle_limit, prepared, record_buses, solver)
     if prepared is not None:
@@ -1154,16 +1239,47 @@ def _stability_metrics(r: DynResult, events, stop_time, angle_limit, case, gens=
             dlt = math.log(sv[peaks[0]] / sv[peaks[1]])
             zeta = dlt / math.sqrt(4 * math.pi ** 2 + dlt ** 2)
     finished = r.ok and float(t[-1]) >= stop_time - 1e-6
+    v_end = _end_voltage_check(vv, last_clear, float(t[-1]))
     if max_sep > angle_limit:
         stable, reason = False, f'Loss of synchronism: rotor-angle separation reached {max_sep:.0f}° (> {angle_limit:.0f}°) at t = {t_max:.2f} s'
     elif not finished:
         stable, reason = False, f'Simulation stopped at t = {float(t[-1]):.2f} s: {r.status_text or r.status}'
+    elif v_end.get('problem'):
+        stable, reason = False, v_end['problem'] + f' (rotor-angle separation {max_sep:.0f}°, TSI {tsi:.0f}%)'
     else:
         stable, reason = True, f'Stable: max rotor-angle separation {max_sep:.0f}°, TSI {tsi:.0f}%'
     metrics = dict(max_angle_sep=max_sep, t_max_sep=t_max, TSI=tsi, min_post_voltage=vmin_post,
                    min_post_voltage_bus=vmin_bus, f_min=fmin, f_max=fmax, damping=zeta,
-                   end_time=float(t[-1]), first_event=first)
+                   end_time=float(t[-1]), first_event=first,
+                   end_v_swing=v_end.get('swing', float('nan')), end_v_min=v_end.get('vmin', float('nan')))
     return metrics, stable, reason
+
+
+# post-disturbance voltage criteria: over the last END_WINDOW s, no bus may swing more than END_SWING pu
+# peak-to-peak (sustained oscillation, e.g. converter control interaction in a weak grid) or average below
+# END_VMIN pu (voltage not recovered). Checked only when the run extends at least END_SETTLE s past the last
+# disturbance, so ordinary post-fault transients are not judged.
+END_WINDOW, END_SETTLE, END_SWING, END_VMIN = 1.0, 1.5, 0.10, 0.80
+
+
+def _end_voltage_check(vv: pd.DataFrame, last_clear: float, t_end: float) -> dict:
+    if not len(vv) or not vv.shape[1] or t_end - last_clear < END_SETTLE + END_WINDOW:
+        return {}
+    w = vv[vv.index >= t_end - END_WINDOW].dropna(axis=1, how='all')
+    if not len(w) or not w.shape[1]:
+        return {}
+    swing = (w.max() - w.min())
+    mean = w.mean()
+    out = dict(swing=float(swing.max()), vmin=float(mean.min()))
+    b = str(swing.idxmax())
+    if swing.max() > END_SWING:
+        out['problem'] = (f'Post-disturbance voltage oscillation: bus {b} still swings between '
+                          f'{w[swing.idxmax()].min():.2f} and {w[swing.idxmax()].max():.2f} pu in the last '
+                          f'{END_WINDOW:g} s')
+    elif mean.min() < END_VMIN:
+        out['problem'] = (f'Voltage not recovered: bus {mean.idxmin()} averages {mean.min():.2f} pu in the last '
+                          f'{END_WINDOW:g} s')
+    return out
 
 
 # --------------------------------------------------------------- studies
@@ -1189,7 +1305,10 @@ def critical_clearing_time(case: dict, fault_bus: str, trip_branch: str | None =
         return r
 
     try:
-        lo, hi = run(t_low), run(t_high)
+        lo = run(t_low)
+        if lo.stable is None:
+            return dict(cct=None, low=None, high=None, runs=runs, network_map=p.net_map, message=lo.reason)
+        hi = run(t_high)
         if not lo.stable:
             return dict(cct=None, low=None, high=t_low, runs=runs, network_map=p.net_map,
                         message=f'Unstable even when cleared in {t_low * 1000:.0f} ms.')
@@ -1225,7 +1344,8 @@ def screen_contingencies(case: dict, branch_ids: list[str], clearing_time=0.1, f
             r = simulate(case, evs, t_fault + clearing_time + post_time, load_alpha, load_beta, angle_limit,
                          prepared=p, solver=solver)
             mt = r.metrics
-            rows.append(dict(branch=bid, fault_bus=bus, verdict='Stable' if r.stable else 'Unstable',
+            rows.append(dict(branch=bid, fault_bus=bus,
+                             verdict='Not simulated' if r.stable is None else 'Stable' if r.stable else 'Unstable',
                              max_angle_sep=mt.get('max_angle_sep', float('nan')), TSI=mt.get('TSI', float('nan')),
                              min_post_voltage=mt.get('min_post_voltage', float('nan')),
                              min_v_bus=mt.get('min_post_voltage_bus', ''),

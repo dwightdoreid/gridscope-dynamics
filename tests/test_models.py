@@ -122,3 +122,59 @@ def test_load_model_and_per_bus_override_reach_dynawo():
     finally:
         import shutil
         shutil.rmtree(p.work_dir, ignore_errors=True)
+
+
+def test_wecc_coupling_impedance_is_scaled_to_the_plant_rating():
+    """Dynawo takes the WECC coupling R/X in pu of 100 MVA; the library default (0.15) is for a 100 MVA plant.
+    Left at default it is scaled to the plant's rating; a value set explicitly is used as given."""
+    rows = {r['key']: r for r in D.source_parameters('PhotovoltaicsWeccCurrentSourceB', None, snom=763.3)}
+    assert rows['photovoltaics_XPu']['scaled_to_rating']
+    assert float(rows['photovoltaics_XPu']['value']) == pytest.approx(0.15 * 100 / 763.3, rel=1e-5)
+    rows = {r['key']: r for r in D.source_parameters('PhotovoltaicsWeccCurrentSourceB',
+                                                     {'photovoltaics_XPu': '0.05'}, snom=763.3)}
+    assert rows['photovoltaics_XPu']['value'] == '0.05' and not rows['photovoltaics_XPu']['scaled_to_rating']
+    # an 806 MVA PV plant on IEEE 39 starts exactly at its load-flow P, Q and voltage (with the unscaled
+    # default it started at 927 MVAr instead of ~290 and pulled its bus from 1.049 to 0.973 pu in 0.1 s)
+    c = C.load_builtin('IEEE 39-Bus')
+    g = next(g for g in c['generators'] if g['id'] == 'G3')
+    g['dyn'] = {'source': 'PhotovoltaicsWeccCurrentSourceB'}
+    flat = D.simulate(c, [], stop_time=2, solver='SIM')
+    assert flat.ok
+    q, v = flat.qgen['G3'], flat.voltages[str(g['bus'])]
+    assert float(q.max() - q.min()) < 1.0 and float(v.max() - v.min()) < 1e-3
+
+
+def test_converter_disconnection_is_reported_not_simulated():
+    """Dynawo cannot disconnect converter models (its solver fails). A trip of a converter, or a branch trip
+    that leaves one in an island with no synchronous source, gives NOT_SIMULATED - not 'unstable'."""
+    c = _wscc('3', 'PhotovoltaicsWeccCurrentSourceB')
+    pv = next(g for g in c['generators'] if str(g['bus']) == '3')['id']
+    radial = next(br['id'] for br in c['branches'] if '3' in (str(br['from']), str(br['to'])))
+    r = D.simulate(c, [D.Event('Bus fault', '9', 1.0, duration=0.1), D.Event('Trip branch', radial, 1.1)],
+                   stop_time=3, solver='SIM')
+    assert r.status == 'NOT_SIMULATED' and r.stable is None
+    assert pv in r.reason and 'islanded' in r.reason and pv in r.lost_gens
+    r = D.simulate(c, [D.Event('Trip generator', pv, 1.0)], stop_time=3, solver='SIM')
+    assert r.status == 'NOT_SIMULATED' and 'tripped' in r.reason
+    sync = next(g for g in c['generators'] if g['id'] != pv and str(g['bus']) != '1')['id']
+    assert D.simulate(c, [D.Event('Trip generator', sync, 1.0)], stop_time=3, solver='SIM').ok
+    df = D.screen_contingencies(c, [radial, 'L5-6'], post_time=2)
+    verdict = dict(zip(df['branch'], df['verdict']))
+    assert verdict[radial] == 'Not simulated' and verdict['L5-6'] == 'Stable'
+    cct = D.critical_clearing_time(c, '9', radial)
+    assert cct['cct'] is None and cct['message'].startswith('Not simulated')
+
+
+def test_sustained_post_fault_voltage_oscillation_is_unstable():
+    """The verdict also checks post-disturbance voltages: a network that keeps oscillating (or stays low) is
+    unstable even when the rotor angles stay together (seen at 61 % PV on IEEE 39, SCR < 2)."""
+    import numpy as np
+    import pandas as pd
+    t = np.arange(0, 6.0001, 0.01)
+    settled = pd.DataFrame({'16': 1.03 + 0.02 * np.exp(-(t - 1.1).clip(0)) * np.sin(8 * t)}, index=t)
+    osc = pd.DataFrame({'16': np.where(t < 1.1, 1.03, 0.8 + 0.55 * np.sin(2 * np.pi * 25 * t))}, index=t)
+    low = pd.DataFrame({'16': np.where(t < 1.1, 1.03, 0.7)}, index=t)
+    assert 'problem' not in D._end_voltage_check(settled, 1.1, 6.0)
+    assert D._end_voltage_check(osc, 1.1, 6.0)['problem'].startswith('Post-disturbance voltage oscillation: bus 16')
+    assert D._end_voltage_check(low, 1.1, 6.0)['problem'].startswith('Voltage not recovered: bus 16')
+    assert D._end_voltage_check(osc, 1.1, 3.0) == {}           # too soon after the disturbance to judge

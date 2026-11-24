@@ -739,6 +739,10 @@ async def run_dynamic_simulation(
     flow; events disturb it (faults, trips, load / set-point steps). Returns the stability verdict, metrics
     (max rotor-angle separation, TSI, min post-fault voltage, frequency extremes, damping), protection
     operations, islanding, and sampled curves. Settings default to the case's dynamicSettings.
+    A case is unstable on loss of synchronism, a failed run, or post-disturbance voltages that keep
+    oscillating (> 0.1 pu peak-to-peak) or stay below 0.8 pu in the last second. Events that would
+    disconnect converter-interfaced generation (a trip, or an island without a synchronous or grid-forming
+    source) return status NOT_SIMULATED with stable = null: Dynawo cannot disconnect converter models.
     The full result stays available to get_dynamic_curves until the case is edited."""
     from gridscope import dynamics as D
     o = _get(case_id)
@@ -817,7 +821,9 @@ async def screen_dynamic_contingencies(
         max_rows: int = 100,
         ctx: Context | None = None) -> dict:
     """Dynamic N-1: for each branch, a bolted 3-phase fault at one end cleared after clearing_time by
-    tripping the branch (one Dynawo run per branch; reports progress). Sorted unstable first, then by TSI."""
+    tripping the branch (one Dynawo run per branch; reports progress). Sorted unstable first, then by TSI.
+    Verdicts: Stable, Unstable, or Not simulated (the trip disconnects converter-interfaced generation, which
+    Dynawo cannot simulate: assess it as a loss of that generation; the detail says how many MW)."""
     from gridscope import dynamics as D
     c = _get(case_id).case
     _require_valid(c)

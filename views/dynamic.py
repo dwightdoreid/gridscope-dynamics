@@ -182,7 +182,9 @@ def _controls_summary(info):
 def _param_editor(rows, key, source_note=''):
     """Editable parameter table; returns {key: (value, type)} of changed cells (validated)."""
     df = pd.DataFrame([dict(Parameter=r['name'], Value='auto' if r['bind'] else ('' if r['value'] in (None, 'None') else r['value']),
-                            Default='auto (= ' + r['bind'] + ')' if r['bind'] else ('—' if r['default'] in (None, 'None') else r['default']),
+                            Default='auto (= ' + r['bind'] + ')' if r['bind'] else
+                            (f"{float(r['value']):.4g} (= {r['default']} pu on the plant rating)" if r.get('scaled_to_rating')
+                             else ('—' if r['default'] in (None, 'None') else r['default'])),
                             Type=r['type'].lower(), Description=r.get('doc', ''), key=r['key'],
                             locked=bool(r['bind'])) for r in rows])
     if source_note:
@@ -401,7 +403,7 @@ def _source_editor(c, g, d, kind, experimental, ver):
                'voltage come from the load flow.')
     if not lib.get('verified', True):
         st.warning('Verification: ' + '; '.join(lib.get('verification', [])[:2]))
-    rows = D.source_parameters(cur, d.get('sourceParams'))
+    rows = D.source_parameters(cur, d.get('sourceParams'), snom=d['SNom'])
     changed = _param_editor(rows, f'ed_src_{ver}_{gid}_{cur}', lib.get('source', ''))
     if changed:
         _apply_overrides(c, gid, 'sourceParams', changed, {r['key']: r['default'] for r in rows},
@@ -589,7 +591,8 @@ def _simulation_tab(c):
                                solver=s['solver'])
         U.put_result('dyn_sim', r)
         st.session_state.dyn_events_used = events
-        st.session_state.status = f'Dynamic simulation: {"stable" if r.stable else "UNSTABLE"}'
+        st.session_state.status = ('Dynamic simulation: ' + ('not simulated' if r.stable is None
+                                                             else 'stable' if r.stable else 'UNSTABLE'))
     r, stale = U.get_result('dyn_sim')
     if r is None:
         U.notice('Define the events and press <b>Run simulation</b>. Tip: after a run, the Network Diagram can replay '
@@ -614,7 +617,9 @@ def _simulation_tab(c):
 
 
 def _verdict(r):
-    if r.stable:
+    if r.stable is None:
+        st.warning(f'**NOT SIMULATED** — {r.reason}', icon='⚠️')
+    elif r.stable:
         st.success(f'**STABLE** — {r.reason}', icon='✅')
     else:
         st.error(f'**UNSTABLE** — {r.reason}', icon='⛔')
@@ -932,10 +937,15 @@ def _screening_tab(c):
     U.stale_note(stale)
     df = res['table']
     n_unst = int((df.verdict == 'Unstable').sum())
+    n_skip = int((df.verdict == 'Not simulated').sum())
     n_isl = int((df.islanded.astype(str) != '').sum()) if 'islanded' in df else 0
-    U.metric_cards([('Contingencies', str(len(df)), None), ('Stable', str(len(df) - n_unst), 'ok'),
+    U.metric_cards([('Contingencies', str(len(df)), None), ('Stable', str(int((df.verdict == 'Stable').sum())), 'ok'),
                     ('Unstable', str(n_unst), 'bad' if n_unst else 'ok'), ('Islanding', str(n_isl), 'warn' if n_isl else None),
                     ('Lowest TSI', U.fmt(df.TSI.min(), 0, ' %'), None)])
+    if n_skip:
+        U.notice(f'{n_skip} contingenc{"y" if n_skip == 1 else "ies"} not simulated: tripping the branch disconnects '
+                 'converter-interfaced generation, which Dynawo cannot simulate. Assess them as a loss of that '
+                 'generation (see the Detail column).')
     with st.container(border=True):
         h1, h2 = st.columns([5, 1])
         with h1:

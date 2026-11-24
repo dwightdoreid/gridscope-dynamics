@@ -193,6 +193,7 @@ Catalogue: `dynawo_par/source_library.json`, built by `tools/build_source_librar
 * Parameter values come from Dynawo's examples and regression tests.
 * Initial P, Q, voltage and angle come from the load flow, as IIDM references.
 * The rating and P/Q limits follow the generator (*auto*).
+* The WECC coupling impedance (`…_RPu`, `…_XPu`) is in pu of Dynawo's 100 MVA system base. Its default (Dynawo's example value, for a 100 MVA plant) is scaled to the plant's rating, so 0.15 pu means 0.15 pu on the plant's own rating whatever its size. A value you enter is used as given, on the 100 MVA base.
 * WECC models use `VRef0Pu = 0`, which tells REEC to take the initial injector voltage as its reference, so a flat start stays flat.
 * Battery storage and models without a plant controller are registered with pypowsybl through `additionalModelsFile`.
 
@@ -219,7 +220,14 @@ Physics checks in the test suite:
 * Halving the TGOV1 droop roughly halves the steady frequency drop after a load step (190 → 90 mHz on IEEE 9).
 * Adding the Kundur PSS cuts the residual electromechanical swing about 3.4×.
 
-An outcome counts as **unstable** when the rotor-angle separation between machines that are still connected exceeds the limit (180° by default, configurable), or when the simulation cannot continue. Machines that end up tripped or islanded are left out of the angle check.
+An outcome counts as **unstable** when:
+* the rotor-angle separation between machines that are still connected exceeds the limit (180° by default, configurable);
+* the simulation cannot continue; or
+* post-disturbance voltages have not settled: in the last second of the run, a bus still swings more than 0.1 pu peak-to-peak (sustained oscillation, for example converter control interaction in a weak grid) or averages below 0.8 pu. This check applies only when the run extends at least 2.5 s past the last disturbance.
+
+Machines that end up tripped or islanded are left out of the angle check.
+
+A case whose events would disconnect converter-interfaced generation is **not simulated**: a generator trip of a converter, or a branch trip that leaves one in an island with no synchronous machine or grid-forming source. Dynawo 1.7 cannot disconnect converter models (its solver fails at the disconnection). The result says which plants and how many MW would be lost, so the case can be assessed as a loss of generation instead. The dynamic N-1 screen lists these cases as *Not simulated*.
 
 ---
 
@@ -319,7 +327,7 @@ When a simulation fails, the app also shows Dynawo's messages under the verdict.
 
 `python tools/acceptance_ieee14.py` runs every study on IEEE 14 and checks each result against MATPOWER case14, a physical law or the verified release values: case handling, load flow, N-1, OPF, short circuit, every event type, CCT, screening, model families, set-point steps and every protection function (67 checks). `--full` adds every library model, governor, AVR, PSS, converter and load model (about 130 checks; the first run compiles about 40 models). It writes `acceptance_report.md` and `.csv`. The manual procedure with the same tests and expected values is in the *IEEE 14-bus acceptance tests* document.
 
-## Verification (`python -m pytest -q tests`, 129 tests)
+## Verification (`python -m pytest -q tests`, 133 tests)
 
 * **AC load flow vs MATPOWER**: IEEE 14 voltages exact to 3 decimals, angles within 0.02°, losses 13.393 MW, slack 232.39 MW.
 * **Conversion vs GridScope's own solver**: a numpy port of GridScope's Ybus + Newton–Raphson. IEEE 9, 14, 14-mod, 39 and 118 agree to ≤ 1e-8 pu, including off-nominal taps and phase shifters.
@@ -337,6 +345,9 @@ When a simulation fails, the app also shows Dynawo's messages under the verdict.
 * **Free composition**: every composable class is wired to the machine. The generated model definition is checked. A composed GAST + ST1A + PSS1A machine starts flat and rides through a fault. Composed model names round-trip from the saved JSON.
 * **Converters and loads**:
   * Battery storage, PV, WTG4A wind and a grid-forming converter start at the load-flow P and stay flat, then ride through a fault.
+  * An 806 MVA PV plant on IEEE 39 starts at its load-flow Q and voltage.
+  * A converter trip, or a converter left islanded, is reported as not simulated, also in screening and CCT.
+  * A sustained post-fault voltage oscillation, or voltages left below 0.8 pu, make the verdict unstable.
   * Load-model choice and per-bus overrides reach Dynawo.
   * A missing parameter is reported instead of crashing.
 * **SIM vs IDA solver**: on IEEE 9 the peak angle separation agrees to 0.4%, and the critical clearing time to about 1% (SIM is slightly conservative).
@@ -369,6 +380,7 @@ When a simulation fails, the app also shows Dynawo's messages under the verdict.
 * Load exponents below 2, and constant-power load models, can make Dynawo fail for a bolted fault at a load bus (voltage → 0). Use α = β = 2, or a small fault reactance.
 * Composed control combinations need a C/C++ compiler and CMake on the machine running the app. The first run of each new combination takes about a minute.
 * Typical sample values for controllers Dynawo has no reference data for are a starting point, not tuned settings.
+* Converter-interfaced plants cannot be disconnected during a simulation (Dynawo 1.7 fails), so the loss of a PV, wind or battery plant is not simulated (see *Dynamic Stability*).
 * Dynawo's frequency base is 50 Hz. The 60 Hz setting only changes how speed is shown in Hz.
 * Large cases (IEEE 118) work for all steady-state studies. Dynamic N-1 on all 186 branches takes several minutes.
 * As with GridScope: a development and preliminary-study tool, not certified engineering software.

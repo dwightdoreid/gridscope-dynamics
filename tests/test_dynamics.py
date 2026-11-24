@@ -115,8 +115,10 @@ def test_ieee_control_models_hold_equilibrium_and_ride_through_faults(model):
     c = _with_model(model)
     flat = D.simulate(c, [], stop_time=5)
     assert flat.ok and (flat.pgen.iloc[-1] - flat.pgen.iloc[0]).abs().max() < 0.5
-    r = D.simulate(c, [D.Event('Bus fault', '4', 1.0, duration=0.1), D.Event('Trip branch', 'L4-5', 1.1)], 6)
-    assert r.ok and r.metrics['end_time'] >= 6 - 1e-6 and r.stable
+    # trip L9-4, not L4-5: with L4-5 out bus 5 is radial and has no load-flow solution (it settles at 0.77 pu with
+    # constant-impedance load, which the post-disturbance voltage check rightly calls unstable)
+    r = D.simulate(c, [D.Event('Bus fault', '4', 1.0, duration=0.1), D.Event('Trip branch', 'L9-4', 1.1)], 6)
+    assert r.ok and r.metrics['end_time'] >= 6 - 1e-6 and r.stable, r.reason
 
 
 def test_parameter_overrides_and_bindings_reach_dynawo():
