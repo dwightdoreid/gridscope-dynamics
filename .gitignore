@@ -9,3 +9,6 @@ vendor/
 
 # Streamlit local secrets (if ever added)
 .streamlit/secrets.toml
+
+# Cases shared with LLM clients through the MCP server (run_mcp.sh)
+workspace/

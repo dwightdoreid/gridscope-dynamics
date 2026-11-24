@@ -67,6 +67,9 @@ VIEWS = [
 ]
 
 
+WS = 'workspace / '                     # prefix of workspace cases in the Case picker
+
+
 def header():
     c = U.case()
     cols = st.columns([2.0, 0.8, 1.45, 0.7, 1.55, 0.85, 0.95, 1.6], vertical_alignment='center')
@@ -74,11 +77,17 @@ def header():
     if cols[1].button('＋ New', width='stretch', help='New network'):
         U.set_case(C.blank_case())
         st.rerun()
-    pick = cols[2].selectbox('Case', list(C.BUILT_IN_CASES), index=1, label_visibility='collapsed', key='case_pick')
-    if cols[3].button('Load', width='stretch', help='Load the selected built-in case'):
-        U.set_case(C.load_builtin(pick))
-        st.session_state.view = 'network'
-        st.rerun()
+    shared = C.workspace_cases()         # written by LLM clients through the MCP server
+    options = list(C.BUILT_IN_CASES) + [f'{WS}{n}' for n in shared]
+    pick = cols[2].selectbox('Case', options, index=1, label_visibility='collapsed', key='case_pick',
+                             help=f'Built-in cases, then the cases in the workspace folder ({WS.strip()})')
+    if cols[3].button('Load', width='stretch', help='Load the selected case'):
+        try:
+            U.set_case(C.load_file(shared[pick[len(WS):]]) if pick.startswith(WS) else C.load_builtin(pick))
+            st.session_state.view = 'network'
+            st.rerun()
+        except (OSError, KeyError, ValueError) as e:     # file removed or not valid GridScope JSON
+            st.error(f'Could not load {pick}: {e}')
     if cols[4].button('▶ Run AC Load Flow', type='primary', width='stretch'):
         with st.spinner('Solving…'):
             ok = steady.run_ac_load_flow()

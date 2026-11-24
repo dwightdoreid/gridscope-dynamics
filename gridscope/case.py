@@ -18,6 +18,8 @@ import math
 from pathlib import Path
 
 CASES_DIR = Path(__file__).resolve().parent.parent / 'cases'
+# cases shared with LLM clients through the MCP server (gridscope/mcp_server.py); the app lists them too
+WORKSPACE_DIR = Path(__file__).resolve().parent.parent / 'workspace'
 
 BUILT_IN_CASES = {
     'IEEE 9-Bus': 'IEEE_9-Bus.json',
@@ -47,6 +49,14 @@ def load_file(path) -> dict:
 
 def load_json_text(text: str) -> dict:
     return normalise(json.loads(text))
+
+
+def workspace_cases() -> dict:
+    """{file name: path} of the GridScope JSON files in the workspace folder, newest first."""
+    if not WORKSPACE_DIR.is_dir():
+        return {}
+    files = sorted(WORKSPACE_DIR.glob('*.json'), key=lambda f: f.stat().st_mtime, reverse=True)
+    return {f.name: f for f in files}
 
 
 def to_json(case: dict) -> str:

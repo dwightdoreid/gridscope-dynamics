@@ -47,6 +47,16 @@ def test_conversion_matches_gridscope_newton_raphson(name):
     assert np.max(np.abs(r['buses'].Va.values - va)) < 1e-6
 
 
+@pytest.mark.parametrize('name', list(C.BUILT_IN_CASES))
+def test_bus_generation_balances(name):
+    """Each generator counted at its own bus only: bus Pg sums to the generators' output and covers load
+    plus losses (bus 3 used to also count the generators of buses 30-39, VL3 being a prefix of VL30)."""
+    _, _, r = loadflow.run_ac(C.load_builtin(name))
+    assert r['converged']
+    assert r['buses']['Pg'].sum() == pytest.approx(r['generators']['P'].sum(), abs=1e-6)
+    assert r['total_gen'] == pytest.approx(r['total_load'] + r['Ploss'], abs=1e-3)
+
+
 def test_phase_shifter_and_off_nominal_tap():
     c = C.load_builtin('IEEE 14-Bus')
     for br in c['branches']:

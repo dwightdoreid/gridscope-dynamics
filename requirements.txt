@@ -4,4 +4,5 @@ plotly>=6
 pandas>=2.2
 numpy>=2.0
 cvxpy>=1.6
+mcp>=2.3,<3
 pytest>=8

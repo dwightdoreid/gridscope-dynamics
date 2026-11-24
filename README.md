@@ -223,6 +223,72 @@ An outcome counts as **unstable** when the rotor-angle separation between machin
 
 ---
 
+## MCP server: GridScope for LLMs
+
+`run_mcp.sh` starts a [Model Context Protocol](https://modelcontextprotocol.io) server. Claude Code, Claude Desktop or any other MCP client can then run GridScope's studies itself: open a case, change it, run load flow, N-1, OPF, short circuit and the Dynawo studies, read the results, and save the case where the app can open it.
+
+The server calls the same engines as the app (`gridscope/`), so the results match. It doesn't need the app running.
+
+### Connecting a client
+
+**Claude Code, in this folder**: `.mcp.json` registers the server as `gridscope`. Claude Code asks once whether to trust it, and `/mcp` shows its status.
+
+**Claude Code, anywhere**:
+
+```bash
+claude mcp add --scope user gridscope -- /path/to/gridscope_dyn/run_mcp.sh
+```
+
+**Claude Desktop** and other clients that take a JSON config (on Linux, Claude Desktop reads `~/.config/Claude/claude_desktop_config.json`):
+
+```json
+{ "mcpServers": { "gridscope": { "command": "/path/to/gridscope_dyn/run_mcp.sh" } } }
+```
+
+The server speaks MCP over stdin/stdout, so starting `run_mcp.sh` by hand shows nothing. Run `./setup_gridscope.sh` first: the server uses the project's `.venv`, and the dynamic tools need Dynawo.
+
+### Sharing cases with the app: `workspace/`
+
+`save_case` writes GridScope JSON to `workspace/` in the project. The app's **Case** picker lists those files after the built-in cases, as `workspace / <file>`. Pick one and press **Load** to see the network the LLM built or studied.
+
+To hand a case the other way, save it from the app with **⭳ Save** into `workspace/`. A client can then `open_case` it by file name. The folder is git-ignored.
+
+### Tools
+
+| Tool | What it does |
+|---|---|
+| `list_cases` | Built-in cases, workspace files, and the cases open in this session |
+| `open_case` | Opens a built-in case, a workspace file, a blank network (`"new"`) or pasted JSON. Returns a `case_id` |
+| `get_case` | Header and element tables (buses, branches, generators). `dynamics` adds per-generator model data and `dynamicSettings` |
+| `validate_case` | The app's model validation |
+| `edit_case` | Applies a list of operations: `update`, `add_bus`, `add_branch`, `add_generator`, `delete` and `set_case`. They are all-or-nothing: if one fails, nothing changes and the error names the operation |
+| `save_case` / `export_case_json` / `close_case` | Saves to `workspace/` (it won't silently replace a different file), returns the JSON, or forgets the case |
+| `run_load_flow` | AC (OpenLoadFlow, Q limits) or DC. Returns totals, voltage violations (outside 0.95–1.05 pu), overloads, generators at limits and PV→PQ switches. `detail="full"` adds every row |
+| `run_contingency_n1` | N-1 branch outages, DC or AC, with islanding. Worst first |
+| `run_dc_opf` | DC-OPF dispatch, cost, LMPs and binding branches |
+| `run_fault_study` | IEC 60909 / ANSI, 3ph / SLG / LL / LLG, at one bus or all |
+| `dynawo_status` / `list_dynamic_models` | Whether Dynawo is ready, what a generator's `dyn` field can select, and the event types |
+| `run_dynamic_simulation` | A Dynawo time-domain run with events. Returns the stability verdict, metrics, protection operations, islanding and sampled curves |
+| `get_dynamic_curves` | More time series from the last run, with no re-run |
+| `critical_clearing_time` | CCT by bisection. Reports progress after each run |
+| `screen_dynamic_contingencies` | Dynamic N-1: fault plus trip for each branch. Reports progress after each run |
+
+Tables come back compactly, as `columns` plus `rows`, and are capped by `max_rows` so large cases stay readable. Errors explain what was wrong. A bad element id lists the case's valid ids, so the model can correct its call.
+
+### Example requests
+
+* *"Open IEEE 39-Bus and run an AC load flow. Which buses are outside 0.95–1.05 pu?"*
+* *"Add a 100 MW solar plant at bus 14 of IEEE 14 through a new 13.8 kV bus and a transformer, then check N-1."*
+* *"What is the critical clearing time for a fault at bus 16 of IEEE 39, cleared by tripping line 16-17? Save the case to the workspace."*
+
+### Notes
+
+* Engine calls run one at a time on a single worker thread, as in the app (pypowsybl's native library must not be called from short-lived threads). A long dynamic screening blocks the other tools until it finishes.
+* Open cases live in the server process. Save them to keep them: they are gone when the client restarts the server.
+* The same disclaimer as the app applies: results come from open-source engines, not a certified tool.
+
+---
+
 ## How the case maps onto PowSyBl
 
 `gridscope/convert.py` turns the per-unit GridScope case into an IIDM network:
@@ -253,7 +319,7 @@ When a simulation fails, the app also shows Dynawo's messages under the verdict.
 
 `python tools/acceptance_ieee14.py` runs every study on IEEE 14 and checks each result against MATPOWER case14, a physical law or the verified release values: case handling, load flow, N-1, OPF, short circuit, every event type, CCT, screening, model families, set-point steps and every protection function (67 checks). `--full` adds every library model, governor, AVR, PSS, converter and load model (about 130 checks; the first run compiles about 40 models). It writes `acceptance_report.md` and `.csv`. The manual procedure with the same tests and expected values is in the *IEEE 14-bus acceptance tests* document.
 
-## Verification (`python -m pytest -q tests`, 87 tests)
+## Verification (`python -m pytest -q tests`, 129 tests)
 
 * **AC load flow vs MATPOWER**: IEEE 14 voltages exact to 3 decimals, angles within 0.02°, losses 13.393 MW, slack 232.39 MW.
 * **Conversion vs GridScope's own solver**: a numpy port of GridScope's Ybus + Newton–Raphson. IEEE 9, 14, 14-mod, 39 and 118 agree to ≤ 1e-8 pu, including off-nominal taps and phase shifters.
@@ -274,6 +340,14 @@ When a simulation fails, the app also shows Dynawo's messages under the verdict.
   * Load-model choice and per-bus overrides reach Dynawo.
   * A missing parameter is reported instead of crashing.
 * **SIM vs IDA solver**: on IEEE 9 the peak angle separation agrees to 0.4%, and the critical clearing time to about 1% (SIM is slightly conservative).
+* **MCP server** (`tests/test_mcp.py`, through a real MCP client):
+  * Every tool is listed with a schema.
+  * A case survives open → edit → save → reopen through `workspace/`.
+  * Edits are all-or-nothing, and errors name the valid ids.
+  * Every steady-state study runs.
+  * An invalid case is refused before solving.
+  * A Dynawo run with curves, and dynamic screening with progress, both work.
+* **Bus generation balance**: on every built-in case, each generator counts at its own bus only, and generation = load + losses.
 * **UI** (Streamlit AppTest):
   * Every view renders and every study runs.
   * The controls editor composes and applies.
@@ -303,8 +377,12 @@ When a simulation fails, the app also shows Dynawo's messages under the verdict.
 
 ```text
 app.py                  Streamlit entry point (header, sidebar, routing, theme)
+run_mcp.sh              MCP server for LLM clients (stdio); .mcp.json registers it with Claude Code
+workspace/              cases shared between MCP clients and the app (git-ignored, created on first save)
 gridscope/              study engines (no UI code)
   case.py               GridScope JSON load/save, defaults, validation
+  edit.py               pure network edits (diagram editor and MCP edit_case)
+  mcp_server.py         MCP server: tools over the engines below
   convert.py            case -> pypowsybl IIDM network
   loadflow.py           AC / DC load flow + result tables
   contingency.py        N-1 (DC / AC) via PowSyBl security analysis

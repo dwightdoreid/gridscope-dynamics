@@ -65,7 +65,9 @@ def _tables(case, network, m):
     base = case['baseMVA']
     vl = network.get_voltage_levels()['nominal_v']
     buses = network.get_bus_breaker_view_buses()
-    gens = network.get_generators()
+    # bus_breaker_bus_id is only returned with all_attributes: without it the generators of buses 30-39
+    # were matched by voltage-level prefix and all counted at bus 3 too (VL3 is a prefix of VL30)
+    gens = network.get_generators(all_attributes=True)
     loads = network.get_loads()
     shunts = network.get_shunt_compensators()
 
@@ -75,7 +77,7 @@ def _tables(case, network, m):
         iidm = m.bus_iidm[bid]
         v_kv, ang = buses.loc[iidm, 'v_mag'], buses.loc[iidm, 'v_angle']
         vm = v_kv / vl[m.bus_vl[bid]]
-        g_here = gens[gens['bus_breaker_bus_id'] == iidm] if 'bus_breaker_bus_id' in gens else gens[gens['bus_id'].str.startswith(m.bus_vl[bid])]
+        g_here = gens[gens['bus_breaker_bus_id'] == iidm]
         pg, qg = -g_here['p'].sum(), -g_here['q'].sum()
         pd_, qd = _num(b['Pd'], 0), _num(b['Qd'], 0)
         bus_rows.append(dict(id=b['id'], name=b.get('name', bid), type=b['type'], Vm=vm, Va=ang,

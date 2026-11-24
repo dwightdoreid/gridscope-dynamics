@@ -83,7 +83,7 @@ if [[ ! -x .venv/bin/python ]]; then
   UPDATE=1
 fi
 PY="$APP_DIR/.venv/bin/python"
-if [[ $UPDATE -eq 1 ]] || ! "$PY" -c 'import streamlit, pypowsybl, plotly, pandas, numpy, cvxpy, pytest' 2>/dev/null; then
+if [[ $UPDATE -eq 1 ]] || ! "$PY" -c 'import streamlit, pypowsybl, plotly, pandas, numpy, cvxpy, pytest, mcp.server.mcpserver' 2>/dev/null; then
   echo "Installing requirements.txt (pypowsybl alone is ~70 MB — this can take a while on a slow link)…"
   "$PY" -m pip install --upgrade pip
   "$PY" -m pip install -r requirements.txt || die "Package installation failed (see messages above)."
