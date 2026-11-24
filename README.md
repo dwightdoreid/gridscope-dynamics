@@ -46,7 +46,7 @@ To use governor / AVR / PSS combinations that Dynawo doesn't ship pre-assembled,
 
 | View | GridScope | Here (engine) |
 |---|---|---|
-| Network Diagram | SVG single-line diagram, inspector, solver options, log | Same, plus a **Standard** drawing style (bus bars, two-circle transformers, generator / load / shunt symbols) next to GridScope's **Schematic** style, a **diagram editor** (✎ Edit: move buses, add / delete elements, edit properties, build a network from scratch), and a **dynamic replay**: bus voltages over time with tripped branches drawn open |
+| Network Diagram | SVG single-line diagram, inspector, solver options, log | Same, plus a **Standard** drawing style (bus bars, two-circle transformers, generator / load / shunt symbols) next to GridScope's **Schematic** style, **animated power-flow arrows** (P or Q, after an AC load flow), a **diagram editor** (✎ Edit: move buses, add / delete elements, edit properties, build a network from scratch), and a **dynamic replay**: bus voltages over time with tripped branches drawn open |
 | Bus / Branch / Generator Data | Editable, sortable tables | Same columns. Add rows at the bottom, select rows + Delete to remove |
 | Analysis Results | AC Newton–Raphson, Q-limit PV→PQ switching | **PowSyBl OpenLoadFlow**, configured to behave like GridScope (below), plus a **Generator Results** table: final P/Q per generator, ΔP vs schedule, voltage vs set-point, limit flags |
 | Contingency (N-1) | DC and AC branch-outage screening | **PowSyBl security analysis**, DC or AC, with islanding detection |
@@ -54,6 +54,14 @@ To use governor / AVR / PSS combinations that Dynawo doesn't ship pre-assembled,
 | Short-Circuit / Faults | IEC 60909 / ANSI, 3ph/SLG/LL/LLG, K_G/K_T, min/max case | **numpy port of GridScope's own engine** |
 | Profiles & Charts | Voltage magnitude and angle | Same, plus branch loading |
 | **Dynamic Stability** ✦ | *(roadmap item in GridScope)* | **Dynawo** via `pypowsybl.dynamic` |
+
+### Power-flow arrows
+
+After an AC load flow, animated arrows on every in-service line and transformer show which way power flows; the **flow Off / P / Q** switch in the diagram's toolbar chooses real or reactive power (it switches instantly and is remembered). Arrows move faster on lines carrying more, and each branch is labelled with its sending-end value (MW or MVAr).
+
+Each half of a branch follows the flow at its own end. Real power always reads as one direction; reactive power can point *out of both ends* — a lightly loaded line exporting its charging MVAr — or *into both ends* (a heavily loaded line absorbing MVAr), and the label then shows both end values (e.g. `26.3 | 7.9 MVAr`). Arrows are hidden when the load-flow results are out of date (the model changed) and during the dynamic-simulation replay; with the system's *reduce motion* setting the arrows are drawn still.
+
+The diagram toolbar also has **⛶ maximize** — the diagram area (with its style / overlay / edit controls, legend and the Selected Element panel) fills the browser window; ⛶ again or Esc restores the layout — and **⭳ PNG download** — the diagram as shown, at twice the screen resolution, with the flow values and a caption naming the case and the flow quantity. Running the AC load flow no longer switches to the results tables: the results appear on the diagram (bus voltages, loading colours, flow arrows), and the tables stay one click away under **Analysis Results**. If the load flow fails, the app goes to the Network Diagram, whose Solver Log explains why.
 
 ### Editing the network in the diagram
 

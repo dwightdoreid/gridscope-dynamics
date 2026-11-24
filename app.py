@@ -82,7 +82,8 @@ def header():
     if cols[4].button('▶ Run AC Load Flow', type='primary', width='stretch'):
         with st.spinner('Solving…'):
             ok = steady.run_ac_load_flow()
-        st.session_state.view = 'results' if ok else 'network'
+        if not ok:                       # the Solver Log (Network Diagram) explains a failure
+            st.session_state.view = 'network'
         st.rerun()
     # filled after the view has run: edits made while rendering the view must be in the saved file
     st.session_state['_save_slot'] = cols[5].empty()

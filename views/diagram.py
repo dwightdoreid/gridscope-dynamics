@@ -99,22 +99,33 @@ class Scene:
     def __init__(self, style, u, grid):
         self.style, self.u, self.grid = style, u, grid
         self.paths, self.bars, self.nodes, self.labels, self.hits = [], [], [], [], []
+        self.flows = []
         self.bus_pos = {}
+        self.dense = False
 
     def path(self, xs, ys, color, width, dash='solid', fill=False, sel=None, bus=None, ends=None):
         self.paths.append(dict(x=[float(v) for v in xs], y=[float(v) for v in ys], color=color,
                                width=float(width), dash=dash, fill=fill, sel=sel, bus=bus, ends=ends))
 
-    def label(self, x, y, text, pos, color, size, bus=None, ends=None, dense_hide=False):
+    def label(self, x, y, text, pos, color, size, bus=None, ends=None, dense_hide=False, kind=None):
         self.labels.append(dict(x=float(x), y=float(y), text=str(text), pos=pos, color=color, size=size,
-                                bus=bus, ends=ends, dense_hide=dense_hide))
+                                bus=bus, ends=ends, dense_hide=dense_hide, kind=kind))
+
+    def flow(self, br, rr, pts, lab, pos, ends):
+        """Load-flow result along a branch, for the animated arrows. pts run from the 'from' bus to the
+        'to' bus. P / Q are [value at the from end, value at the to end], each positive when power
+        enters the branch at that end (load-flow convention), so the two halves of a line can point
+        different ways — e.g. a lightly loaded line exporting its charging MVAr at both ends."""
+        self.flows.append(dict(id=str(br['id']), ends=ends, pts=[[float(x), float(y)] for x, y in pts],
+                               P=[float(rr['Pf']), float(rr['Pt'])], Q=[float(rr['Qf']), float(rr['Qt'])],
+                               lab=[float(lab[0]), float(lab[1])], pos=pos))
 
     def hit(self, x, y, sel, tip, group, bus=None, ends=None):
         self.hits.append(dict(x=float(x), y=float(y), sel=sel, tip=tip, group=group, bus=bus, ends=ends))
 
     def to_json(self):
         return dict(style=self.style, u=self.u, grid=self.grid, paths=self.paths, bars=self.bars,
-                    nodes=self.nodes, labels=self.labels, hits=self.hits,
+                    nodes=self.nodes, labels=self.labels, hits=self.hits, flows=self.flows, dense=self.dense,
                     bus_pos={k: [float(v[0]), float(v[1])] for k, v in self.bus_pos.items()})
 
 
@@ -123,8 +134,13 @@ def build_scene(case, lf=None, overlay=None, open_branches=(), style='Schematic'
     if dense is None:
         dense = len(case['buses']) > 40
     if style == 'Standard':
-        return _scene_standard(case, lf, overlay, open_branches, dense)
-    return _scene_schematic(case, lf, overlay, open_branches)
+        sc = _scene_standard(case, lf, overlay, open_branches, dense)
+    else:
+        sc = _scene_schematic(case, lf, overlay, open_branches)
+    sc.dense = dense
+    if overlay is not None:
+        sc.flows = []
+    return sc
 
 
 def build_figure(case, lf=None, overlay=None, open_branches=(), height=610, style='Schematic'):
@@ -233,7 +249,10 @@ def _scene_schematic(case, lf, overlay, open_branches):
         sel, ends = ('branch', str(br['id'])), (fa, tb)
         sc.path([a[0], b[0]], [a[1], b[1]], color, width, dash, sel=sel, ends=ends)
         mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
-        sc.label(mx, my, br['id'], 'top center', MUTED, 10, ends=ends)
+        sc.label(mx, my, br['id'], 'top center', MUTED, 10, ends=ends, kind='branch_id')
+        rr = br_res.get(br['id'])
+        if rr is not None and not out:
+            sc.flow(br, rr, [a, b], (mx, my), 'top center', ends)
         sc.hit(mx, my, sel, tip, 'branches', ends=ends)
     for b in buses:
         bid = str(b['id'])
@@ -469,7 +488,10 @@ def _scene_standard(case, lf, overlay, open_branches, dense):
             mid = (sa + sb) / 2
             lab = mid
         pos_txt = 'bottom center' if below else 'middle right' if abs(e[1]) > abs(e[0]) else 'top center'
-        sc.label(lab[0], lab[1], br['id'], pos_txt, MUTED, 10, ends=ends, dense_hide=dense)
+        sc.label(lab[0], lab[1], br['id'], pos_txt, MUTED, 10, ends=ends, dense_hide=dense, kind='branch_id')
+        rr = br_res.get(br['id'])
+        if rr is not None and not out:
+            sc.flow(br, rr, [(ax, ay), sa, sb, (bx, by)], lab, pos_txt, ends)
         sc.hit(mid[0], mid[1], sel, tip, 'branches', ends=ends)
 
     # --- generators, loads, shunts

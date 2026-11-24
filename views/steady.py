@@ -12,7 +12,7 @@ from gridscope import case as C
 from gridscope import contingency, faults, loadflow, opf
 from views import common as U
 from views import editor as E
-from views.diagram import STYLES, build_scene, to_plotly
+from views.diagram import STYLES, build_scene
 
 
 # =============================================================== load flow
@@ -55,7 +55,13 @@ def _view_network():
     c = U.case()
     ac, ac_stale = U.get_result('ac')
     dyn_res, _ = U.get_result('dyn_sim')
-    left, right = st.columns([2, 1], gap='medium')
+    if st.session_state.get('diag_max'):
+        # maximized diagram: the whole area (diagram card + side panels) is pinned over the window;
+        # the app header and sidebar are underneath until ⛶ / Esc restores the layout
+        st.markdown(f'<style>.st-key-sld_area {{ position: fixed; inset: 0; z-index: 1000100; background: {U.BG};'
+                    f' padding: 14px 18px; overflow-y: auto; }}</style>', unsafe_allow_html=True)
+    area = st.container(key='sld_area')
+    left, right = area.columns([2.6, 1] if st.session_state.get('diag_max') else [2, 1], gap='medium')
     with left:
         with st.container(border=True):
             h1, h4, h3, h2 = st.columns([1.5, 1.0, 1.8, 1.7], vertical_alignment='center')
@@ -92,17 +98,10 @@ def _view_network():
                 + ('<span><b style="color:#facc15">editing</b>: changes apply to the network</span>' if editing else '')
                 + ('<span>colour = bus voltage: <b style="color:#fb7185">0.90</b> → <b style="color:#34d399">1.00</b>'
                    ' → <b style="color:#a78bfa">1.10</b> pu</span>' if overlay else
-                   '<span>branch colour/width = loading</span>') + '</div>', unsafe_allow_html=True)
+                   '<span>branch colour/width = loading · <b style="color:#fbbf24">▸</b> power flow '
+                   '(after AC load flow)</span>') + '</div>', unsafe_allow_html=True)
             scene = build_scene(c, None if ac_stale else ac, overlay, open_br, style=style)
-            if editing:
-                E.render(scene, height=610)
-            else:
-                ev = st.plotly_chart(to_plotly(scene, 610), key='sld', on_select='rerun', selection_mode='points',
-                                     config=dict(displaylogo=False, scrollZoom=True,
-                                                 modeBarButtonsToRemove=['select2d', 'lasso2d']))
-                pts = (ev or {}).get('selection', {}).get('points', []) if ev else []
-                if pts and pts[0].get('customdata'):
-                    st.session_state.inspect = pts[0]['customdata'][:2]
+            E.render(scene, height=610, editable=editing)
     with right:
         with st.container(border=True):
             U.card_header('Selected Element')

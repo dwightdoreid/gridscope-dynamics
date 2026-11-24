@@ -1,4 +1,5 @@
-"""Interactive single-line diagram editor.
+"""Single-line diagram component: the interactive view (animated power-flow arrows, pan / zoom,
+click to inspect) and, with Edit on, the diagram editor.
 
 The browser side (sld_editor.js, a Streamlit components-v2 component) draws the same Scene as the
 read-only diagram and reports actions: select, move a bus, add a bus / line / transformer /
@@ -49,6 +50,15 @@ CSS = """
 .gs-tools button.danger:hover:not(:disabled) { background: #fb7185; color: #08101d; }
 .gs-tools .sep { width: 1px; height: 20px; background: #283754; margin: 0 2px; }
 .gs-tools .snap { color: #9fb0ca; font-size: 12px; padding: 0 6px; cursor: pointer; }
+.gs-tools .seglbl { color: #9fb0ca; font-size: 12px; padding: 0 2px 0 4px; }
+.gs-tools .seg { display: inline-flex; border: 1px solid #283754; border-radius: 7px; overflow: hidden; }
+.gs-tools .seg button { border-radius: 0; min-width: 34px; font-size: 12px; font-weight: 600; }
+.gs-tools .seg button[data-flow="P"].on { background: #fbbf24; }
+.gs-tools .seg button[data-flow="Q"].on { background: #22d3ee; }
+.gs-tools .seg button[data-flow="off"].on { background: #283754; color: #eef4ff; }
+.gs-svg .farrow { pointer-events: none; opacity: 0.95; }
+.gs-sld.flows-on .gs-svg .brid { display: none; }
+.gs-svg .flowlbl { font-weight: 600; paint-order: stroke; stroke: #121a2e; stroke-width: 3px; }
 .gs-hint { position: absolute; left: 10px; bottom: 8px; z-index: 2; color: #9fb0ca; font-size: 12px;
            background: rgba(11, 16, 32, 0.75); padding: 3px 8px; border-radius: 6px; pointer-events: none; }
 .gs-tip { position: absolute; display: none; z-index: 3; pointer-events: none; background: #17223b;
@@ -219,19 +229,26 @@ def _exists(case, sel):
     return any(str(x['id']) == str(eid) for x in pool)
 
 
-def render(scene, height=610):
-    """Mount the editor; handle the action it sent (if any) and rerun."""
+def render(scene, height=610, editable=True):
+    """Mount the diagram (editor when editable); handle the action it sent (if any) and rerun."""
     ss = st.session_state
     sel = ss.get('inspect')
     if sel and not _exists(ss.case, sel):
         sel = ss.inspect = None
     payload = dict(scene=scene.to_json(), selected=list(sel) if sel else None, height=height,
                    token=ss.get('case_load', 0), can_undo=bool(ss.get('sld_undo')),
-                   message=ss.pop('sld_message', None))
-    res = _COMPONENT(key='sld_editor', data=payload, height=height, on_action_change=lambda: None)
+                   message=ss.pop('sld_message', None), editable=editable,
+                   name=U.slug(ss.case['name']), title=ss.case['name'], maximized=bool(ss.get('diag_max')))
+    # height 'content': the drawing sets its own height (fixed, or the window's when maximized)
+    res = _COMPONENT(key='sld_editor', data=payload, height='content', on_action_change=lambda: None)
     act = getattr(res, 'action', None) if res is not None else None
     if not act:
         return
+    if act.get('type') == 'maximize':
+        ss.diag_max = bool(act.get('on'))
+        st.rerun()
+    if not editable and act.get('type') != 'select':
+        return                                     # view mode: only clicks to inspect
     if act.get('type') == 'undo':
         undo()
         st.rerun()

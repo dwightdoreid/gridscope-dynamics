@@ -70,7 +70,7 @@ def test_steady_state_studies_from_ui(at):
     at.session_state['view'] = 'network'
     at.run()
     _click(at, '▶ Run AC Load Flow')
-    assert at.session_state['view'] == 'results'
+    assert at.session_state['view'] == 'network'          # stays put: results show on the diagram
     assert at.session_state['results']['ac']['value']['converged']
     at.session_state['view'] = 'contingency'
     at.run()

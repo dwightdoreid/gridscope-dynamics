@@ -7,7 +7,7 @@ import pytest
 
 from gridscope import case as C
 from gridscope import loadflow as LF
-from views.diagram import STYLES, build_figure
+from views.diagram import STYLES, build_figure, build_scene
 
 CASES = sorted((Path(__file__).resolve().parent.parent / 'cases').glob('*.json'))
 
@@ -57,3 +57,36 @@ def test_load_flow_and_dynamic_overlays(style):
     tips = [cd[2] for tr in fig.data if tr.customdata is not None for cd in tr.customdata]
     assert any('V at t = 0.10 s' in t for t in tips)
     assert any('<i>open</i>' in t for t in tips)
+
+
+@pytest.mark.parametrize('style', STYLES)
+def test_power_flow_data_for_the_arrows(style):
+    c = _load(Path(__file__).resolve().parent.parent / 'cases' / 'IEEE_9-Bus.json')
+    _, _, res = LF.run_ac(c)
+    flows = {f['id']: f for f in build_scene(c, res, style=style).flows}
+    assert set(flows) == {str(br['id']) for br in c['branches']}         # every in-service branch
+    br_res = res['branches'].set_index('id')
+    for bid, f in flows.items():
+        r = br_res.loc[bid]
+        assert f['P'] == pytest.approx([r.Pf, r.Pt]) and f['Q'] == pytest.approx([r.Qf, r.Qt])
+        frm, to = next((str(b['from']), str(b['to'])) for b in c['branches'] if str(b['id']) == bid)
+        assert f['ends'] == [frm, to] or tuple(f['ends']) == (frm, to)
+        # the path runs from the 'from' bus to the 'to' bus
+        bus = {str(b['id']): (b['x'], b['y']) for b in c['buses']}
+        start, end = f['pts'][0], f['pts'][-1]
+        d = lambda p, q: ((p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2) ** 0.5   # noqa: E731
+        assert d(start, bus[frm]) < d(start, bus[to]) and d(end, bus[to]) < d(end, bus[frm])
+    # L5-6 exports its charging MVAr at both ends: both Q values negative (leaving the line)
+    assert flows['L5-6']['Q'][0] < 0 and flows['L5-6']['Q'][1] < 0
+
+
+def test_no_flow_arrows_without_a_current_load_flow_or_during_dynamic_replay():
+    c = _load(Path(__file__).resolve().parent.parent / 'cases' / 'IEEE_9-Bus.json')
+    _, _, res = LF.run_ac(c)
+    assert build_scene(c, None, style='Standard').flows == []
+    overlay = dict(voltages={str(b['id']): 1.0 for b in c['buses']}, label='t')
+    assert build_scene(c, res, overlay, style='Standard').flows == []
+    # an open branch carries no arrows
+    c['branches'][0]['status'] = 0
+    _, _, res = LF.run_ac(c)
+    assert str(c['branches'][0]['id']) not in {f['id'] for f in build_scene(c, res, style='Standard').flows}
